@@ -1,19 +1,17 @@
+import { HeartIcon, ShieldCheckIcon, ShoppingCartIcon } from "@heroicons/react/solid";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { formatCurrency } from "../../helpers";
-import { ShoppingCartIcon, HeartIcon, ShieldCheckIcon } from "@heroicons/react/solid";
-import Rating from "./Rating";
-import productApi from "../../api/productApi";
 import { getProductDetail } from "../../app/productDetailSlice";
+import { formatCurrency } from "../../helpers";
 import Loading from "../UI/Loading";
+import Rating from "./Rating";
 const ProductDetail = () => {
   const [image, setImage] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading, error, product } = useSelector((state) => state.productDetails);
-  console.log(product, loading, error);
   useEffect(() => {
     const fetchProduct = async () => {
       dispatch(getProductDetail(id));
