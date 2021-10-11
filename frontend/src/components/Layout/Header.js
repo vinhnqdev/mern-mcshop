@@ -23,12 +23,12 @@ const Header = () => {
       </div>
 
       {/* Login and Cart */}
-      <div className="flex space-x-2">
+      <div className="flex space-x-3">
         <div className="bg-white rounded-full p-1">
-          <UserCircleIcon className="h-6 text-black cursor-pointer" />
+          <UserCircleIcon className="h-7 text-black cursor-pointer" />
         </div>
         <div className="bg-white rounded-full p-1">
-          <ShoppingCartIcon className="h-6 text-black cursor-pointer" />
+          <ShoppingCartIcon className="h-7 text-black cursor-pointer" />
         </div>
       </div>
     </header>
