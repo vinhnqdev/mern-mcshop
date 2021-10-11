@@ -1,11 +1,15 @@
 import React from "react";
 
 import { SearchCircleIcon, UserCircleIcon, ShoppingCartIcon } from "@heroicons/react/solid";
+import { useHistory } from "react-router";
 const Header = () => {
+  const history = useHistory();
   return (
-    <header className="fixed w-full top-0 z-50 bg-black text-white flex items-center justify-between p-5">
+    <header className="fixed w-full top-0 z-50 bg-black text-white flex items-center justify-between px-5 py-7">
       {/* Logo */}
-      <div className="text-3xl font-semibold cursor-pointer">MCSHOP</div>
+      <div className="text-3xl font-semibold cursor-pointer" onClick={() => history.push("/")}>
+        MCSHOP
+      </div>
       {/* Search */}
       <div className="flex-1 hidden items-stretch px-3 sm:flex justify-center">
         <input

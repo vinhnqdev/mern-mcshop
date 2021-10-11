@@ -1,0 +1,37 @@
+{
+  "name": "MCShop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "server": "nodemon backend/index.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "import:data": "node backend/seeder",
+    "destroy:data": "node backend/seeder -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinhnqdev/mern-mcshop.git"
+  },
+  "keywords": [],
+  "author": "Vinh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinhnqdev/mern-mcshop/issues"
+  },
+  "homepage": "https://github.com/vinhnqdev/mern-mcshop#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mongoose": "^6.0.10",
+    "nodemon": "^2.0.13"
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0"
+  }
+}
