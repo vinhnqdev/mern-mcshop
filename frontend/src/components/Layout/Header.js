@@ -2,8 +2,13 @@ import React from "react";
 
 import { SearchCircleIcon, UserCircleIcon, ShoppingCartIcon } from "@heroicons/react/solid";
 import { useHistory } from "react-router";
+import { useSelector } from "react-redux";
 const Header = () => {
   const history = useHistory();
+  const cart = useSelector((state) => state.cart.cart);
+  const cartQuantity = cart.reduce((acc, product) => {
+    return acc + product.quantity;
+  }, 0);
   return (
     <header className="fixed w-full top-0 z-50 bg-black text-white flex items-center justify-between px-5 py-7">
       {/* Logo */}
@@ -27,11 +32,11 @@ const Header = () => {
         <div className="bg-white rounded-full p-1">
           <UserCircleIcon className="h-7 text-black cursor-pointer" />
         </div>
-        <div className="relative bg-white rounded-full p-1">
+        <div onClick={() => history.push("/cart")} className="relative bg-white rounded-full p-1">
           <ShoppingCartIcon className="h-7 text-black cursor-pointer" />
           {/** Cart items quantity */}
           <span className="absolute flex items-center justify-center text-black text-xs font-semibold w-5 h-5 -top-2 -right-2 rounded-full bg-yellow-400">
-            0
+            {cartQuantity}
           </span>
         </div>
       </div>

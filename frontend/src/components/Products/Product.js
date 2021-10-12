@@ -2,12 +2,26 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { formatCurrency } from "../../helpers/index";
 import { ShoppingCartIcon, HeartIcon } from "@heroicons/react/solid";
+import { useDispatch } from "react-redux";
 import Rating from "./Rating";
+import { cartActions } from "../../app/cartSlice";
 const Product = ({ _id, image, name, price, discount, rating }) => {
+  const dispatch = useDispatch();
+
   const originalPrice = discount ? price + (price * discount) / 100 : price;
 
   const handleAddToCart = (e) => {
     e.preventDefault();
+    dispatch(
+      cartActions.addToCart({
+        _id,
+        image,
+        name,
+        price,
+        discount,
+        quantity: 1,
+      })
+    );
   };
 
   return (
