@@ -13,7 +13,6 @@ router.post(
     const { email, password } = req.body;
     try {
       const user = await User.findByCredentials(email, password);
-      console.log(user);
       const token = await user.generateAuthToken();
       res.send({
         user,
@@ -49,9 +48,18 @@ router.post(
 // @route   GET /api/users/login
 // @access  Private
 
-router.get("/profile", auth, async (req, res) => {
-  res.send(req.user);
-});
+router.get(
+  "/profile",
+  auth,
+  asyncHandler(async (req, res) => {
+    if (!req.user) {
+      console.log("NOT FOUND!!!");
+      res.status(404);
+      throw new Error("Failed to auth!!");
+    }
+    res.send(req.user);
+  })
+);
 
 // @desc    User Update
 // @route   PATCH /api/users/update
@@ -71,6 +79,11 @@ router.patch(
     if (!isValidOperation) {
       res.status(400);
       throw new Error("Invalid update");
+    }
+
+    if (!user) {
+      res.status(400);
+      throw new Error("Not found");
     }
 
     userBodyField.forEach((field) => (user[field] = req.body[field]));

@@ -9,6 +9,7 @@ export const getProducts = createAsyncThunk("products/getProducts", async (param
     thunkAPI.dispatch(
       productsActions.getProductFailed(error.response && error.response.data.message)
     );
+    throw new Error();
   }
 });
 

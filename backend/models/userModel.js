@@ -21,14 +21,14 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    // tokens: [
+    //   {
+    //     token: {
+    //       type: String,
+    //       required: true,
+    //     },
+    //   },
+    // ],
   },
   {
     timestamps: true,
@@ -37,7 +37,8 @@ const userSchema = new mongoose.Schema(
 
 userSchema.methods.generateAuthToken = async function () {
   const token = await jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET);
-  this.tokens = this.tokens.concat({ token });
+  // this.tokens = this.tokens.concat({ token });
+  // this.tokens = [...this.tokens, { token }];
   await this.save();
   return token;
 };
@@ -69,7 +70,6 @@ userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 8);
   }
-
   next();
 });
 

@@ -6,10 +6,12 @@ export const auth = asyncHandler(async (req, res, next) => {
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
     const user = await User.findOne({
       _id: decoded._id,
       "tokens.token": token,
     });
+
     req.user = user;
     req.token = token;
   } else {
