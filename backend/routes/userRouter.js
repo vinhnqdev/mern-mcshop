@@ -45,7 +45,7 @@ router.post(
 );
 
 // @desc    User Profile
-// @route   GET /api/users/login
+// @route   GET /api/users/profile
 // @access  Private
 
 router.get(
@@ -92,6 +92,24 @@ router.patch(
       res.send(user);
     } catch (error) {
       res.status(500).send();
+    }
+  })
+);
+
+// @desc    User Delete
+// @route   DELETE /api/users/profile
+// @access  Private
+
+router.delete(
+  "/profile",
+  auth,
+  asyncHandler(async (req, res) => {
+    try {
+      console.log(req.user);
+      await User.deleteOne({ _id: req.user.id });
+      res.send(req.user);
+    } catch (error) {
+      throw new Error("Failed to delete.");
     }
   })
 );
