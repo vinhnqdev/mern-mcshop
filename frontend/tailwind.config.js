@@ -11,6 +11,9 @@ module.exports = {
       colors: {
         "main-bg": "#FAFAFA",
       },
+      outline: {
+        red: "2px solid red",
+      },
     },
   },
   variants: {

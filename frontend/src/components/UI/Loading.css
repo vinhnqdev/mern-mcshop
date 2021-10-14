@@ -1,9 +1,9 @@
 .loader {
   font-size: 10px;
-  margin: 50px auto;
+  margin: 10px auto;
   text-indent: -9999em;
-  width: 11em;
-  height: 11em;
+  width: 5em;
+  height: 5em;
   border-radius: 50%;
   background: #000;
   background: -moz-linear-gradient(left, #000 10%, rgba(255, 255, 255, 0) 42%);

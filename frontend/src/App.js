@@ -2,7 +2,9 @@ import { Route, Switch } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
-import Login from "./pages/Login";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+
 import ProductDetailPage from "./pages/ProductDetailPage";
 
 function App() {
@@ -23,7 +25,11 @@ function App() {
           </Route>
 
           <Route path="/login">
-            <Login />
+            <LoginPage />
+          </Route>
+
+          <Route path="/register">
+            <RegisterPage />
           </Route>
 
           <Route path="*">Not Found</Route>
