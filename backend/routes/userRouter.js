@@ -20,7 +20,7 @@ router.post(
       });
     } catch (error) {
       res.status(401);
-      throw new Error(error.message);
+      throw new Error("Sai email hoặc mật khẩu");
     }
   })
 );
@@ -88,9 +88,11 @@ router.patch(
     userBodyField.forEach((field) => (user[field] = req.body[field]));
     try {
       await user.save();
+
       res.send(user);
     } catch (error) {
-      res.status(500).send();
+      res.status(400);
+      throw new Error("Email đã tồn tại");
     }
   })
 );

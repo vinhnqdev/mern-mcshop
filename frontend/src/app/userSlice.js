@@ -7,7 +7,9 @@ export const login = createAsyncThunk("user/login", async (params, thunkAPI) => 
     localStorage.setItem("user", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
-    throw new Error(error.response && error.response.data.message);
+    throw new Error(
+      (error.response && error.response.data.message) || "Failed to login, try again."
+    );
   }
 });
 
@@ -21,22 +23,30 @@ export const register = createAsyncThunk("user/register", async (params, thunkAP
   }
 });
 
+export const update = createAsyncThunk("user/update", async (params, thunkAPI) => {
+  try {
+    const response = await userApi.update(params);
+    const currentlocalStorageUser = JSON.parse(localStorage.getItem("user"));
+    const newlocalStorageUser = { ...currentlocalStorageUser, user: response.data };
+    localStorage.setItem("user", JSON.stringify(newlocalStorageUser));
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response && error.response.data.message);
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
     current: JSON.parse(localStorage.getItem("user")) || {},
     loading: false,
   },
-  // reducers: {
-  //   loginFailed: (state, action) => {
-  //     state.loading = false;
-  //     state.error = action.payload;
-  //   },
-  //   registerFailed: (state, action) => {
-  //     state.loading = false;
-  //     state.error = action.payload;
-  //   },
-  // },
+  reducers: {
+    logout: (state) => {
+      localStorage.removeItem("user");
+      state.current = {};
+    },
+  },
   extraReducers: {
     [login.pending]: (state) => {
       state.loading = true;
@@ -57,6 +67,16 @@ const userSlice = createSlice({
     [register.fulfilled]: (state, action) => {
       state.loading = false;
       state.current = action.payload;
+    },
+    [update.pending]: (state) => {
+      state.loading = true;
+    },
+    [update.rejected]: (state) => {
+      state.loading = false;
+    },
+    [update.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.current.user = action.payload;
     },
   },
 });

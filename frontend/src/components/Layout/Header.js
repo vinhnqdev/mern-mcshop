@@ -5,10 +5,12 @@ import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
 const Header = () => {
   const history = useHistory();
+  const { user } = useSelector((state) => state.user.current);
   const cart = useSelector((state) => state.cart.cart);
   const cartQuantity = cart.reduce((acc, product) => {
     return acc + product.quantity;
   }, 0);
+
   return (
     <header className="fixed w-full top-0 z-50 bg-black text-white flex items-center justify-between px-5 py-7">
       {/* Logo */}
@@ -16,7 +18,7 @@ const Header = () => {
         MCSHOP
       </div>
       {/* Search */}
-      <div className="flex-1 hidden items-stretch px-3 sm:flex justify-center">
+      <div className="flex-1 hidden items-stretch px-10 sm:flex justify-center">
         <input
           type="text"
           placeholder="Search here"
@@ -28,13 +30,23 @@ const Header = () => {
       </div>
 
       {/* Login and Cart */}
-      <div className="flex space-x-3">
-        <div className="bg-white rounded-full p-1">
-          <UserCircleIcon
-            className="h-7 text-black cursor-pointer"
-            onClick={() => history.push("/login")}
-          />
-        </div>
+      <div className="flex items-center space-x-3">
+        {user && (
+          <span
+            className="cursor-pointer hover:underline"
+            onClick={() => history.push("/profile/edit")}
+          >
+            Hello {user.name}
+          </span>
+        )}
+        {!user && (
+          <div className="bg-white rounded-full p-1">
+            <UserCircleIcon
+              className="h-7 text-black cursor-pointer"
+              onClick={() => history.push("/login")}
+            />
+          </div>
+        )}
         <div onClick={() => history.push("/cart")} className="relative bg-white rounded-full p-1">
           <ShoppingCartIcon className="h-7 text-black cursor-pointer" />
           {/** Cart items quantity */}

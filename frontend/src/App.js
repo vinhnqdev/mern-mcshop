@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 import ProductDetailPage from "./pages/ProductDetailPage";
+import PrivateRoute from "./components/PrivateRoute";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -27,10 +29,13 @@ function App() {
           <Route path="/login">
             <LoginPage />
           </Route>
-
           <Route path="/register">
             <RegisterPage />
           </Route>
+
+          <PrivateRoute path="/profile">
+            <ProfilePage />
+          </PrivateRoute>
 
           <Route path="*">Not Found</Route>
         </Switch>
