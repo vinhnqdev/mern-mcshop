@@ -1,13 +1,18 @@
-import { unwrapResult } from "@reduxjs/toolkit";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route } from "react-router-dom";
-import { update } from "../../app/userSlice";
+import { update, userDetail } from "../../app/userThunk";
 import UpdateForm from "../Form/UpdateForm";
 import { toast } from "react-toastify";
 function Profile({ className }) {
-  const { user } = useSelector((state) => state.user.current);
+  const details = useSelector((state) => state.user.userDetail);
   const dispatch = useDispatch();
+
+  // Fetch User Detail
+  useEffect(() => {
+    dispatch(userDetail());
+  }, [dispatch]);
+
   const handleUpdateForm = async ({ name, email, password }) => {
     try {
       await dispatch(update({ name, email, password }));
@@ -19,8 +24,8 @@ function Profile({ className }) {
   };
 
   const initialFormValue = {
-    name: user.name,
-    email: user.email,
+    name: details.name,
+    email: details.email,
     password: "",
     confirmPassword: "",
   };
@@ -31,9 +36,11 @@ function Profile({ className }) {
         <Route path="/profile/orders">
           <p>Profile/Order</p>
         </Route>
-        <Route path="/profile/edit">
-          <UpdateForm initialValues={initialFormValue} onSubmit={handleUpdateForm} />
-        </Route>
+        {details && Object.keys(details).length > 0 && (
+          <Route path="/profile/edit">
+            <UpdateForm initialValues={initialFormValue} onSubmit={handleUpdateForm} />
+          </Route>
+        )}
         <Route path="/profile/logout"></Route>
       </Switch>
     </div>

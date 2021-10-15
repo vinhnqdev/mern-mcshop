@@ -1,7 +1,7 @@
 import React from "react";
 import LoginForm from "../components/Form/LoginForm";
 import { useDispatch } from "react-redux";
-import { login } from "../app/userSlice";
+import { login } from "../app/userThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";

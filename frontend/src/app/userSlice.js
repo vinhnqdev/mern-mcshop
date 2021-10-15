@@ -1,44 +1,11 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import userApi from "../api/userApi";
-
-export const login = createAsyncThunk("user/login", async (params, thunkAPI) => {
-  try {
-    const response = await userApi.login(params);
-    localStorage.setItem("user", JSON.stringify(response.data));
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      (error.response && error.response.data.message) || "Failed to login, try again."
-    );
-  }
-});
-
-export const register = createAsyncThunk("user/register", async (params, thunkAPI) => {
-  try {
-    const response = await userApi.register(params);
-    localStorage.setItem("user", JSON.stringify(response.data));
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response && error.response.data.message);
-  }
-});
-
-export const update = createAsyncThunk("user/update", async (params, thunkAPI) => {
-  try {
-    const response = await userApi.update(params);
-    const currentlocalStorageUser = JSON.parse(localStorage.getItem("user"));
-    const newlocalStorageUser = { ...currentlocalStorageUser, user: response.data };
-    localStorage.setItem("user", JSON.stringify(newlocalStorageUser));
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response && error.response.data.message);
-  }
-});
+import { createSlice } from "@reduxjs/toolkit";
+import { login, update, register, userDetail } from "./userThunk.js";
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
     current: JSON.parse(localStorage.getItem("user")) || {},
+    userDetail: {},
     loading: false,
   },
   reducers: {
@@ -48,6 +15,16 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
+    [userDetail.pending]: (state) => {
+      state.loading = true;
+    },
+    [userDetail.rejected]: (state) => {
+      state.loading = false;
+    },
+    [userDetail.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.userDetail = action.payload;
+    },
     [login.pending]: (state) => {
       state.loading = true;
     },

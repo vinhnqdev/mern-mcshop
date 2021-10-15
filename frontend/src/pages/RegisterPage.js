@@ -1,7 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { register } from "../app/userSlice";
+import { register } from "../app/userThunk";
 import RegisterForm from "../components/Form/RegisterForm";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router";
