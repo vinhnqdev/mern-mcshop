@@ -2,9 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { formatCurrency } from "../../helpers/";
 import CartItem from "./CartItem";
+import { useHistory } from "react-router-dom";
 function Cart() {
   const cart = useSelector((state) => state.cart.cart);
-
+  const history = useHistory();
   const totalPrice = cart.reduce((acc, item) => {
     return acc + item.price * item.quantity;
   }, 0);
@@ -62,10 +63,16 @@ function Cart() {
 
         {/** Checkout */}
         <div className="bg-white shadow-xl mt-7 p-4 space-y-3">
-          <button className="bg-yellow-500 block w-full p-3 rounded-full text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg">
+          <button
+            onClick={() => history.push("/checkout/shipping")}
+            className="bg-yellow-500 block w-full p-3 rounded-full text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg"
+          >
             Thanh toán ngay
           </button>
-          <button className=" block w-full p-3 rounded-full text-black border border-gray-300 font-normal lg:rounded-none lg:p-4 lg:text-lg">
+          <button
+            onClick={() => history.push("/")}
+            className=" block w-full p-3 rounded-full text-black border border-gray-300 font-normal lg:rounded-none lg:p-4 lg:text-lg"
+          >
             Quay về cửa hàng
           </button>
         </div>

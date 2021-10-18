@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { toast } from "react-toastify";
 import { update, userDetail } from "../../app/userThunk";
 import UpdateForm from "../Form/UpdateForm";
-import { toast } from "react-toastify";
 function Profile({ className }) {
   const details = useSelector((state) => state.user.userDetail);
   const dispatch = useDispatch();
+  const routerMatch = useRouteMatch();
 
   // Fetch User Detail
   useEffect(() => {
@@ -33,15 +34,15 @@ function Profile({ className }) {
   return (
     <div className={className}>
       <Switch>
-        <Route path="/profile/orders">
+        <Route path={`${routerMatch.path}/orders`}>
           <p>Profile/Order</p>
         </Route>
         {details && Object.keys(details).length > 0 && (
-          <Route path="/profile/edit">
+          <Route path={`${routerMatch.path}/edit`}>
             <UpdateForm initialValues={initialFormValue} onSubmit={handleUpdateForm} />
           </Route>
         )}
-        <Route path="/profile/logout"></Route>
+        <Route path={`${routerMatch.path}/logout`}></Route>
       </Switch>
     </div>
   );

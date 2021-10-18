@@ -8,6 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import PrivateRoute from "./components/PrivateRoute";
 import ProfilePage from "./pages/ProfilePage";
+import CheckoutPage from "./pages/CheckoutPage";
 
 function App() {
   return (
@@ -29,12 +30,17 @@ function App() {
           <Route path="/login">
             <LoginPage />
           </Route>
+
           <Route path="/register">
             <RegisterPage />
           </Route>
 
-          <PrivateRoute path="/profile">
+          <PrivateRoute path="/profile" redirectPath="/login?redirect=profile/edit">
             <ProfilePage />
+          </PrivateRoute>
+
+          <PrivateRoute path="/checkout/shipping" redirectPath="/login?redirect=checkout">
+            <CheckoutPage />
           </PrivateRoute>
 
           <Route path="*">Not Found</Route>

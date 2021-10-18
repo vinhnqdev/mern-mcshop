@@ -37,7 +37,6 @@ export const update = createAsyncThunk("user/update", async (params, thunkAPI) =
 
 export const userDetail = createAsyncThunk("user/userDetail", async (params, thunkAPI) => {
   try {
-    console.log("FETCH!!!");
     const response = await userApi.getDetail();
     return response.data;
   } catch (error) {

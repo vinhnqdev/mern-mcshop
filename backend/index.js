@@ -6,6 +6,8 @@ import ProductRouter from "./routes/productRouter.js";
 import CategoryRouter from "./routes/categoryRouter.js";
 import BrandRouter from "./routes/brandRouter.js";
 import UserRouter from "./routes/userRouter.js";
+import ShippingAddressRouter from "./routes/shippingAddressRouter.js";
+
 import chalk from "chalk";
 const app = express();
 const PORT = process.env.port || 5000;
@@ -20,6 +22,7 @@ app.use("/api/products", ProductRouter);
 app.use("/api/categories", CategoryRouter);
 app.use("/api/brands", BrandRouter);
 app.use("/api/users/", UserRouter);
+app.use("/api/addresses/", ShippingAddressRouter);
 
 // Custom Middleware
 app.use(notFound);

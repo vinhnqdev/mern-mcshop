@@ -3,18 +3,21 @@ import LoginForm from "../components/Form/LoginForm";
 import { useDispatch } from "react-redux";
 import { login } from "../app/userThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { toast } from "react-toastify";
+import queryString from "query-string";
 function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
+  const { redirect } = queryString.parse(location.search);
 
   const handleSubmit = async (user) => {
     try {
       const actionResult = await dispatch(login(user));
       const currentUser = unwrapResult(actionResult);
       if (currentUser.token) {
-        history.push("/");
+        history.push(redirect ? `/${redirect}` : "");
       }
     } catch (error) {
       toast.error(error.message);

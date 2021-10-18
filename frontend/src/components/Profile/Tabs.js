@@ -1,9 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useRouteMatch } from "react-router-dom";
 import { userActions } from "../../app/userSlice";
 function Tabs({ className }) {
   const dispatch = useDispatch();
+  const routerMatch = useRouteMatch();
   const handleLogout = () => {
     dispatch(userActions.logout());
   };
@@ -12,7 +13,7 @@ function Tabs({ className }) {
     <ul className={className}>
       <li>
         <NavLink
-          to="/profile/orders"
+          to={`${routerMatch.path}/orders`}
           activeClassName="activeNav"
           className="block w-full border-b border-gray-300 py-2"
         >
@@ -21,7 +22,7 @@ function Tabs({ className }) {
       </li>
       <li>
         <NavLink
-          to="/profile/edit"
+          to={`${routerMatch.path}/edit`}
           activeClassName="activeNav"
           className="block w-full border-b border-gray-300 py-2"
         >
@@ -30,7 +31,7 @@ function Tabs({ className }) {
       </li>
       <li>
         <NavLink
-          to="/profile/logout"
+          to={`${routerMatch.path}/logout`}
           activeClassName="activeNav"
           className="block w-full border-b border-gray-300 py-2"
           onClick={handleLogout}
