@@ -1,11 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, update, register, userDetail } from "./userThunk.js";
+import {
+  login,
+  update,
+  register,
+  userDetail,
+  addUserAddress,
+  getUserAddresses,
+} from "./userThunk.js";
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
     current: JSON.parse(localStorage.getItem("user")) || {},
     userDetail: {},
+    userAddress: JSON.parse(localStorage.getItem("ad")) || {},
+    userAddresses: [],
     loading: false,
   },
   reducers: {
@@ -54,6 +63,26 @@ const userSlice = createSlice({
     [update.fulfilled]: (state, action) => {
       state.loading = false;
       state.current.user = action.payload;
+    },
+    [addUserAddress.pending]: (state) => {
+      state.loading = true;
+    },
+    [addUserAddress.rejected]: (state) => {
+      state.loading = false;
+    },
+    [addUserAddress.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.userAddress = action.payload;
+    },
+    [getUserAddresses.pending]: (state) => {
+      state.loading = true;
+    },
+    [getUserAddresses.rejected]: (state) => {
+      state.loading = false;
+    },
+    [getUserAddresses.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.userAddresses = action.payload;
     },
   },
 });

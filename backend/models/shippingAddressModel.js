@@ -23,7 +23,7 @@ export const shippingAddressSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    commune: {
+    ward: {
       type: String,
       required: true,
     },

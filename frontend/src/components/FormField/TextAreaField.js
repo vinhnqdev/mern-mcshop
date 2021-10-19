@@ -1,7 +1,7 @@
 import React from "react";
 import { useController } from "react-hook-form";
 
-function InputField({ label, name, control, ...inputProps }) {
+function TextAreaField({ label, name, control, ...textAreaField }) {
   const {
     field,
     fieldState: { error, invalid },
@@ -10,11 +10,10 @@ function InputField({ label, name, control, ...inputProps }) {
   return (
     <div className="space-y-1">
       <label htmlFor={name}>{label}</label>
-      <input
+      <textarea
         id={name}
         {...field}
-        {...inputProps}
-        ref={field.ref}
+        {...textAreaField}
         className={`w-full border ${invalid ? "border-red-500" : "border-gray-400"} text-md p-2`}
       />
       {/** Error Message */}
@@ -23,4 +22,4 @@ function InputField({ label, name, control, ...inputProps }) {
   );
 }
 
-export default InputField;
+export default TextAreaField;

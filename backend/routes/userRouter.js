@@ -60,6 +60,18 @@ router.get(
   })
 );
 
+// @desc    Get User Address
+// @route   GET /api/users/addresses
+// @access  Private
+router.get(
+  "/addresses",
+  auth,
+  asyncHandler(async (req, res) => {
+    await req.user.populate("addresses");
+    res.send(req.user.addresses);
+  })
+);
+
 // @desc    User Update
 // @route   PATCH /api/users/update
 // @access  Private

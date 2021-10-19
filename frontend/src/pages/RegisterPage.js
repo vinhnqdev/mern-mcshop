@@ -17,7 +17,6 @@ function Login() {
         history.push("/");
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.message);
     }
   };

@@ -1,5 +1,5 @@
 import express from "express";
-import ShippingAddressModel from "../models/shippingAddressModel.js";
+import ShippingAddress from "../models/shippingAddressModel.js";
 import asyncHandler from "express-async-handler";
 import { auth } from "../middleware/authMiddleware.js";
 const router = express.Router();
@@ -13,7 +13,10 @@ router.post(
   auth,
   asyncHandler(async (req, res) => {
     try {
-      const address = new ShippingAddressModel({
+      if (req.body.isDefault) {
+        await ShippingAddress.updateMany({ isDefault: true }, { $set: { isDefault: false } });
+      }
+      const address = new ShippingAddress({
         ...req.body,
         user: req.user._id,
       });

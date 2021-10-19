@@ -36,6 +36,12 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.virtual("addresses", {
+  ref: "ShippingAddress",
+  localField: "_id",
+  foreignField: "user",
+});
+
 userSchema.methods.generateAuthToken = async function () {
   const token = await jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET);
   // this.tokens = this.tokens.concat({ token });
