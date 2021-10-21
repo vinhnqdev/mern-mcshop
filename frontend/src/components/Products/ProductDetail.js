@@ -2,6 +2,7 @@ import { HeartIcon, ShieldCheckIcon, ShoppingCartIcon } from "@heroicons/react/s
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { cartActions } from "../../app/cartSlice";
 import { getProductDetail } from "../../app/productDetailSlice";
 import { formatCurrency } from "../../helpers";
 import Loading from "../UI/Loading";
@@ -11,7 +12,7 @@ const ProductDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { loading, error, product } = useSelector((state) => state.productDetails);
+  const { loading, product } = useSelector((state) => state.productDetails);
   useEffect(() => {
     const fetchProduct = async () => {
       dispatch(getProductDetail(id));
@@ -29,6 +30,19 @@ const ProductDetail = () => {
   // if (!product) {
   //   return <p>Loading...</p>;
   // }
+
+  const handleAddTocart = ({ _id, images, name, price, discount }) => {
+    dispatch(
+      cartActions.addToCart({
+        _id,
+        image: images[0],
+        name,
+        price,
+        discount,
+        quantity: 1,
+      })
+    );
+  };
 
   if (loading) {
     return <Loading />;
@@ -78,7 +92,10 @@ const ProductDetail = () => {
             <Rating rating={product.rating} size="medium" />
 
             <div className="flex items-center">
-              <button className="flex-1 flex items-center justify-center space-x-3 bg-yellow-500 py-2 cursor-pointer rounded-full text-white">
+              <button
+                onClick={() => handleAddTocart(product)}
+                className="flex-1 flex items-center justify-center space-x-3 bg-yellow-500 py-2 cursor-pointer rounded-full text-white"
+              >
                 <ShoppingCartIcon className="h-7 inline-block" />
                 <span className="uppercase font-bold text-lg">Mua hàng</span>
               </button>

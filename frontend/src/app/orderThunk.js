@@ -19,6 +19,26 @@ export const getOrderById = createAsyncThunk("order/getOrderById", async (params
   }
 });
 
+export const getMyOrders = createAsyncThunk("order/getMyOrders", async (params, thunkAPI) => {
+  try {
+    const response = await orderApi.getMyOrders();
+    const orders = [];
+    response.data.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        orders.push({
+          ...item,
+          updatedAt: order.updatedAt,
+          isDelivered: order.isDelivered,
+          order_id: order._id,
+        });
+      });
+    });
+    return orders.reverse();
+  } catch (error) {
+    throw new Error((error.response && error.response.data.message) || error.message);
+  }
+});
+
 export const payOrder = createAsyncThunk(
   "order/payOrder",
   async ({ orderId, paymentResult }, thunkAPI) => {

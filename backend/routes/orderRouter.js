@@ -43,6 +43,23 @@ router.post(
   })
 );
 
+// @desc    Get all of orders
+// @route   GET /api/orders/me
+// @access   GET Private
+
+router.get(
+  "/me",
+  auth,
+  asyncHandler(async (req, res) => {
+    try {
+      const orders = await Order.find({ user: req.user._id });
+      res.send(orders);
+    } catch (error) {
+      throw new Error("Failed to fetch data");
+    }
+  })
+);
+
 // @desc    Get order By Id
 // @route   GET /api/orders/:id
 // @access   GET Private

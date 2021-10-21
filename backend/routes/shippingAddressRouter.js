@@ -13,6 +13,10 @@ router.post(
   auth,
   asyncHandler(async (req, res) => {
     try {
+      const count = await ShippingAddress.countDocuments({ user: req.user._id });
+      if (!req.body.isDefault && count === 0) {
+        req.body.isDefault = true;
+      }
       if (req.body.isDefault) {
         await ShippingAddress.updateMany(
           { isDefault: true, user: req.user._id },

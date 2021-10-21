@@ -85,9 +85,15 @@ export const getUserAddresses = createAsyncThunk(
         throw new Error("Something went wrong!");
       }
 
-      const response = await addressApi.getAll();
+      const { data: addressList } = await addressApi.getAll();
 
-      const userAddresses = response.data.map((address) => {
+      // Logic move default address at the first elem of the list
+      const defaultAddressIndex = addressList.findIndex((address) => address.isDefault);
+      const defaultAddress = addressList[defaultAddressIndex];
+      const newAddressList = addressList.filter((address, index) => index !== defaultAddressIndex);
+      newAddressList.unshift(defaultAddress);
+
+      const userAddresses = newAddressList.map((address) => {
         const provice = listProvince.find((provice) => provice.code === +address.city).name;
         const district = listDistrict.find((district) => district.code === +address.district).name;
         const ward = listWard.find((ward) => ward.code === +address.ward).name;
@@ -98,7 +104,6 @@ export const getUserAddresses = createAsyncThunk(
         };
       });
       return userAddresses;
-      // return response.data;
     } catch (error) {
       throw new Error(error.response && error.response.data.message);
     }

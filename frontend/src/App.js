@@ -8,7 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import PrivateRoute from "./components/PrivateRoute";
 import ProfilePage from "./pages/ProfilePage";
-import CheckoutPage from "./pages/CheckoutPage";
+import ShippingPage from "./pages/ShippingPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
 import SuccessOrderPage from "./pages/SuccessOrderPage";
 
@@ -42,7 +42,7 @@ function App() {
           </PrivateRoute>
 
           <PrivateRoute path="/checkout/shipping" redirectPath="/login?redirect=checkout">
-            <CheckoutPage />
+            <ShippingPage />
           </PrivateRoute>
 
           <PrivateRoute

@@ -5,6 +5,7 @@ import CartItem from "./CartItem";
 import { useHistory } from "react-router-dom";
 function Cart() {
   const cart = useSelector((state) => state.cart.cart);
+
   const history = useHistory();
   const totalPrice = cart.reduce((acc, item) => {
     return acc + item.price * item.quantity;
@@ -13,6 +14,7 @@ function Cart() {
   const itemQuantity = cart.reduce((acc, item) => {
     return acc + item.quantity;
   }, 0);
+
   return (
     <div className="lg:grid grid-cols-6 gap-7">
       {/** Progress */}
@@ -21,6 +23,7 @@ function Cart() {
         <div className="flex items-center space-x-5 lg:grid lg:grid-cols-6 lg:space-x-0">
           <div className="lg:col-span-4 lg:flex items-center space-x-8">
             <h3 className="text-xl uppercase font-semibold lg:text-3xl lg:font-bold">Giỏ hàng</h3>
+
             <span className="hidden lg:inline-block uppercase text-gray-500 text-lg">
               {`( ${itemQuantity} Sản phẩm )`}
             </span>
@@ -31,17 +34,20 @@ function Cart() {
         </div>
 
         {/** Cart List */}
-        <div className="bg-white shadow-xl mt-5">
-          <ul className="space-y-5 px-4 py-5">
-            {cart.map((item) => (
-              <CartItem key={item._id} item={item} />
-            ))}
-          </ul>
-        </div>
+        {cart.length === 0 ? (
+          <p>Giỏ hàng rỗng</p>
+        ) : (
+          <div className="bg-white shadow-xl mt-5">
+            <ul className="space-y-5 px-4 py-5">
+              {cart.map((item) => (
+                <CartItem key={item._id} item={item} />
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {/** TotalPrice */}
-
       <div className="lg:col-span-2">
         {/** TotalPrice */}
         <div className="bg-white shadow-xl mt-7 p-4 space-y-3">
@@ -64,10 +70,21 @@ function Cart() {
         {/** Checkout */}
         <div className="bg-white shadow-xl mt-7 p-4 space-y-3">
           <button
+            disabled={cart.length === 0}
             onClick={() => history.push("/checkout/shipping")}
-            className="relative group z-10 border hover:border-yellow-500 hover:text-black block w-full p-3 rounded-full text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg"
+            className={`relative group z-10 border  block w-full p-3 rounded-full ${
+              cart.length !== 0 && "hover:border-yellow-500 hover:text-black"
+            } ${
+              cart.length === 0 && "cursor-not-allowed"
+            } text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg`}
           >
-            <span className="absolute -z-10 top-0 left-0 w-full h-full origin-right bg-yellow-500 transition transform group-hover:scale-x-0"></span>
+            <span
+              className={`absolute -z-10 top-0 left-0 w-full h-full origin-right ${
+                cart.length === 0
+                  ? "bg-opacity-70 cursor-not-allowed"
+                  : "bg-opacity-100 cursor-pointer"
+              } bg-yellow-500 transition transform ${cart.length !== 0 && "group-hover:scale-x-0"}`}
+            ></span>
             Mua ngay
           </button>
           <button

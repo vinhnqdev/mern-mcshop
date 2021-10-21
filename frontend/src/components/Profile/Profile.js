@@ -4,6 +4,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { toast } from "react-toastify";
 import { update, userDetail } from "../../app/userThunk";
 import UpdateForm from "../Form/UpdateForm";
+import AddressNotes from "./AddressNotes";
 import OrderDetail from "./OrderDetail";
 import Orders from "./Orders";
 function Profile({ className }) {
@@ -48,6 +49,9 @@ function Profile({ className }) {
 
         <Route path={`${routerMatch.path}/view/:id`}>
           <OrderDetail />
+        </Route>
+        <Route path={`${routerMatch.path}/address`}>
+          <AddressNotes />
         </Route>
       </Switch>
     </div>

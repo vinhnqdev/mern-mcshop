@@ -19,6 +19,14 @@ const orderApi = {
       },
     });
   },
+  getMyOrders: () => {
+    const url = "/api/orders/me";
+    return axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+  },
   updatePaidStatus: (orderId, paymentResult) => {
     const url = `/api/orders/${orderId}/pay`;
     return axios.patch(url, paymentResult, {

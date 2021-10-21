@@ -6,16 +6,13 @@ import ShippingForm from "../components/Form/ShippingForm";
 import { toast } from "react-toastify";
 import { unwrapResult } from "@reduxjs/toolkit";
 import UserAddressList from "../components/Checkout/UserAddressList";
-function CheckoutPage() {
+function ShippingPage() {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [formIsShown, setFormIsShow] = useState(false);
   const userAddresses = useSelector((state) => state.user.userAddresses);
-
-  useEffect(() => {
-    dispatch(getUserAddresses());
-  }, [dispatch]);
+  const loading = useSelector((state) => state.user.loading);
 
   const handleShippingSubmit = async (shippingAddress) => {
     try {
@@ -27,6 +24,10 @@ function CheckoutPage() {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    dispatch(getUserAddresses());
+  }, [dispatch]);
 
   const handleShowForm = () => {
     setFormIsShow((preState) => !preState);
@@ -50,7 +51,7 @@ function CheckoutPage() {
           <>
             <p className="font-semibold text-lg">Địa chỉ giao hàng</p>
             <p className="text-sm md:text-base">Chọn địa chỉ giao hàng có sẵn bên dưới</p>
-            <UserAddressList />
+            <UserAddressList loading={loading} userAddresses={userAddresses} />
           </>
         )}
         <div className="sm:text-center text-sm mt-5 md:mt-10">
@@ -67,4 +68,4 @@ function CheckoutPage() {
   );
 }
 
-export default CheckoutPage;
+export default ShippingPage;
