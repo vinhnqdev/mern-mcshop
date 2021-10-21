@@ -14,10 +14,17 @@ module.exports = {
       outline: {
         red: "2px solid red",
       },
+      zIndex: {
+        "-10": "-10",
+      },
     },
   },
   variants: {
     scale: ["group-hover"],
+    extend: {
+      borderWidth: ["last"],
+    },
   },
+
   plugins: [require("tailwind-scrollbar-hide")],
 };

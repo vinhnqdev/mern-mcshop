@@ -22,6 +22,9 @@ const userSlice = createSlice({
       localStorage.removeItem("user");
       state.current = {};
     },
+    updateAddress: (state, action) => {
+      state.userAddress = action.payload;
+    },
   },
   extraReducers: {
     [userDetail.pending]: (state) => {

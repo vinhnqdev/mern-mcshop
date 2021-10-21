@@ -4,6 +4,8 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { toast } from "react-toastify";
 import { update, userDetail } from "../../app/userThunk";
 import UpdateForm from "../Form/UpdateForm";
+import OrderDetail from "./OrderDetail";
+import Orders from "./Orders";
 function Profile({ className }) {
   const details = useSelector((state) => state.user.userDetail);
   const dispatch = useDispatch();
@@ -35,7 +37,7 @@ function Profile({ className }) {
     <div className={className}>
       <Switch>
         <Route path={`${routerMatch.path}/orders`}>
-          <p>Profile/Order</p>
+          <Orders />
         </Route>
         {details && Object.keys(details).length > 0 && (
           <Route path={`${routerMatch.path}/edit`}>
@@ -43,6 +45,10 @@ function Profile({ className }) {
           </Route>
         )}
         <Route path={`${routerMatch.path}/logout`}></Route>
+
+        <Route path={`${routerMatch.path}/view/:id`}>
+          <OrderDetail />
+        </Route>
       </Switch>
     </div>
   );

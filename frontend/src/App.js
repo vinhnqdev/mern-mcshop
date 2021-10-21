@@ -10,10 +10,11 @@ import PrivateRoute from "./components/PrivateRoute";
 import ProfilePage from "./pages/ProfilePage";
 import CheckoutPage from "./pages/CheckoutPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
+import SuccessOrderPage from "./pages/SuccessOrderPage";
 
 function App() {
   return (
-    <div className="font-mont">
+    <div className="font-mont bg-main-bg">
       <Layout>
         <Switch>
           <Route path="/" exact>
@@ -49,6 +50,10 @@ function App() {
             redirectPath="/login?redirect=checkout/placeorder"
           >
             <PlaceOrderPage />
+          </PrivateRoute>
+
+          <PrivateRoute path="/checkout/success" redirectPath="/login">
+            <SuccessOrderPage />
           </PrivateRoute>
 
           <Route path="*">Not Found</Route>

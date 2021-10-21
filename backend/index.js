@@ -6,6 +6,7 @@ import ProductRouter from "./routes/productRouter.js";
 import CategoryRouter from "./routes/categoryRouter.js";
 import BrandRouter from "./routes/brandRouter.js";
 import UserRouter from "./routes/userRouter.js";
+import OrderRouter from "./routes/orderRouter.js";
 import ShippingAddressRouter from "./routes/shippingAddressRouter.js";
 
 import chalk from "chalk";
@@ -22,6 +23,7 @@ app.use("/api/products", ProductRouter);
 app.use("/api/categories", CategoryRouter);
 app.use("/api/brands", BrandRouter);
 app.use("/api/users/", UserRouter);
+app.use("/api/orders/", OrderRouter);
 app.use("/api/addresses/", ShippingAddressRouter);
 
 // Custom Middleware

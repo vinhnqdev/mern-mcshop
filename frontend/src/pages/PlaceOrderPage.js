@@ -1,10 +1,13 @@
 import React from "react";
-import { useSelector } from "react-redux";
+
+import CheckoutCart from "../components/Checkout/CheckoutCart";
 
 const PlaceOrderPage = () => {
-  const userAddress = useSelector((state) => state.user.userAddress);
-  console.log(userAddress);
-  return <div>PlaceOrderPage</div>;
+  return (
+    <>
+      <CheckoutCart />
+    </>
+  );
 };
 
 export default PlaceOrderPage;

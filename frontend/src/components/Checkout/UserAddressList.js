@@ -1,21 +1,23 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { userActions } from "../../app/userSlice";
 import Loading from "../UI/Loading";
 
 function UserAddressList() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const userAddresses = useSelector((state) => state.user.userAddresses);
   const loading = useSelector((state) => state.user.loading);
 
   const handleShippingAddress = (_id) => {
     const address = userAddresses.find((address) => address._id === _id);
     if (!address) return;
-    localStorage.setItem(
-      "ad",
-      JSON.stringify({
+    dispatch(
+      userActions.updateAddress({
         address: address.userAddress,
         phone: address.phone,
+        name: address.name,
         _id: address._id,
       })
     );

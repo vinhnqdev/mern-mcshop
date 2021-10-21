@@ -25,13 +25,13 @@ function Cart() {
               {`( ${itemQuantity} Sản phẩm )`}
             </span>
           </div>
-          <p className="text-gray-600 font-bold">Giá tiền</p>
-          <p className="text-gray-600 font-bold">Số lượng</p>
+          <p className="text-gray-600 font-bold hidden lg:block">Giá tiền</p>
+          <p className="text-gray-600 font-bold hidden lg:block">Số lượng</p>
           <div className="h-px bg-gray-500 flex-1 lg:hidden"></div>
         </div>
 
+        {/** Cart List */}
         <div className="bg-white shadow-xl mt-5">
-          {/** Cart List */}
           <ul className="space-y-5 px-4 py-5">
             {cart.map((item) => (
               <CartItem key={item._id} item={item} />
@@ -65,9 +65,10 @@ function Cart() {
         <div className="bg-white shadow-xl mt-7 p-4 space-y-3">
           <button
             onClick={() => history.push("/checkout/shipping")}
-            className="bg-yellow-500 block w-full p-3 rounded-full text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg"
+            className="relative group z-10 border hover:border-yellow-500 hover:text-black block w-full p-3 rounded-full text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg"
           >
-            Thanh toán ngay
+            <span className="absolute -z-10 top-0 left-0 w-full h-full origin-right bg-yellow-500 transition transform group-hover:scale-x-0"></span>
+            Mua ngay
           </button>
           <button
             onClick={() => history.push("/")}

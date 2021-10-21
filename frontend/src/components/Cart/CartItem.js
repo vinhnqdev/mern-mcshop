@@ -50,31 +50,39 @@ function CartItem({ item }) {
   };
 
   return (
-    <li className="bg-white flex space-x-3 lg:space-x-10">
+    <li className="bg-white flex space-x-3 md:space-x-7 lg:space-x-10">
       {/** LEFT */}
-      <div className="flex items-center">
+      <div className="flex items-center space-x-2">
         <div className="bg-gray-300 p-1 rounded-full">
           <TrashIcon className="h-6 text-white cursor-pointer" onClick={clearItem} />
         </div>
-        <div className="w-14 h-14 sm:w-20 sm:h-20 lg:w-28 lg:h-28">
-          <img src={item.image} alt={item.name} className="object-cover w-full h-full" />
+        <div className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
+          <img
+            src={item.image}
+            alt={item.name}
+            className="object-cover w-full h-full border p-1 border-gray-600 rounded-lg"
+          />
         </div>
       </div>
 
       {/** RIGHT */}
       <div className="space-y-2 lg:w-full lg:grid lg:grid-cols-4 items-center">
-        <h4 className="uppercase font-semibold text-sm lg:col-span-2 lg:text-lg lg:font-bold">
+        {/** Name */}
+        <h4 className="uppercase font-semibold text-gray-800 md:text-lg lg:col-span-2 lg:font-bold">
           {item.name}
         </h4>
+        {/** Price */}
         <div className="flex items-center space-x-4 lg:flex-col lg:col-span-1 lg:space-x-0">
-          <p className="text-sm uppercase text-gray-400 line-through lg:order-1">
+          <p className="text-sm uppercase font-medium text-gray-600 line-through md:text-base  lg:order-1">
             {formatCurrency(originalPrice, "vi-VN", "VND")}
           </p>
-          <p className="text-sm font-semibold uppercase text-yellow-500 lg:text-base">
+          <p className="text-sm font-semibold uppercase text-yellow-500 md:text-base">
             {formatCurrency(item.price, "vi-VN", "VND")}
           </p>
         </div>
-        <div className="flex lg:col-span-1 lg:items-center justify-center">
+
+        {/** Quantity */}
+        <div className="flex lg:col-span-1 lg:items-center">
           <div className="self-stretch cursor-pointer">
             <MinusIcon
               onClick={removeToCartHandler}
