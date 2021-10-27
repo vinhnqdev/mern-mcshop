@@ -50,3 +50,12 @@ export const payOrder = createAsyncThunk(
     }
   }
 );
+
+export const deliverOrder = createAsyncThunk("order/deliverOrder", async (params, thunkAPI) => {
+  try {
+    const response = await orderApi.updateDeliveredStatus(params);
+    return response.data;
+  } catch (error) {
+    throw new Error((error.response && error.response.data.message) || error.message);
+  }
+});

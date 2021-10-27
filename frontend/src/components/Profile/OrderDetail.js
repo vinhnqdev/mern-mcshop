@@ -1,23 +1,29 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { getOrderById } from "../../app/orderThunk";
+import { useHistory, useParams } from "react-router";
+import { deliverOrder, getOrderById } from "../../app/orderThunk";
 import { formatReadableDate, formatShippingDate } from "../../helpers/date";
 import {
   ClipboardListIcon,
   LocationMarkerIcon,
   BadgeCheckIcon,
   CashIcon,
+  XCircleIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/solid";
 import { formatCurrency } from "../../helpers";
 import { Link } from "react-router-dom";
-function OrderDetail() {
+import Loading from "../UI/Loading";
+import { Button, message } from "antd";
+import { unwrapResult } from "@reduxjs/toolkit";
+function OrderDetail({ isAdmin }) {
   const { id } = useParams();
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const order = useSelector((state) => state.order.orderDetail);
 
-  console.log(order);
+  const loading = useSelector((state) => state.order.loading);
 
   useEffect(() => {
     if (id) {
@@ -25,8 +31,42 @@ function OrderDetail() {
     }
   }, [dispatch, id]);
 
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (Object.keys(order).length === 0) {
+    return <p>Opps!! Something went wrong</p>;
+  }
+
+  const handleDeliveredOrder = async () => {
+    try {
+      const actionResult = await dispatch(deliverOrder(id));
+      await unwrapResult(actionResult);
+      history.push("/admin/order-list");
+      message.success({
+        content: "Cập nhật thành công",
+        icon: <CheckCircleIcon className="w-10 h-10 text-green-500" />,
+        className: "custom-message custom-message-success",
+      });
+    } catch (error) {
+      message.error({
+        content: error.message,
+        icon: <XCircleIcon className="w-10 h-10 text-red-600" />,
+        className: "custom-message custom-message-error",
+      });
+    }
+  };
+
   return (
     <div className="mt-8 space-y-6 md:mt-0">
+      <div>
+        {isAdmin && (
+          <Button type="primary" onClick={handleDeliveredOrder}>
+            Delivered
+          </Button>
+        )}
+      </div>
       {/** Time and Order Code */}
       <div className="bg-white shadow-xl px-3 py-2 lg:px-5 lg:py-4">
         <div className="flex space-x-2">
@@ -34,7 +74,7 @@ function OrderDetail() {
           <p className="text-sm lg:text-base">
             Đơn hàng <span>#{order._id}</span> -{" "}
             <span className="font-medium text-yellow-500 lg:text-lg">
-              {order.isDelivered ? "Đang giao" : "Đang xử lý"}
+              {order.isDelivered ? "Đã nhận hàng" : "Đang giao hàng"}
             </span>
           </p>
         </div>
@@ -124,7 +164,7 @@ function OrderDetail() {
       </div>
 
       <div className="mt-3 text-blue-500 text-sm">
-        <Link to="/profile/orders">Quay lại đơn hàng của tôi</Link>
+        <Link to="/admin/order-list">Quay lại quản lý đơn hàng</Link>
       </div>
     </div>
   );

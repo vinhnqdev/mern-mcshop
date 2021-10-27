@@ -1,5 +1,6 @@
 // import axiosClient from "./axiosClient";
 import axios from "axios";
+import { getToken } from "../helpers";
 
 const productApi = {
   get(params) {
@@ -9,6 +10,32 @@ const productApi = {
   getById(id) {
     const url = `/api/products/${id}`;
     return axios.get(url);
+  },
+  addProduct: (product) => {
+    const url = "/api/products";
+    return axios.post(url, product, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+  },
+  updateProduct: (product, id) => {
+    const url = `/api/products/${id}`;
+    return axios.patch(url, product, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+  },
+  deleteProduct: (id) => {
+    const url = `/api/products/${id}`;
+    return axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
   },
 };
 

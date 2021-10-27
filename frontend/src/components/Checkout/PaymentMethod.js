@@ -9,8 +9,8 @@ function PaymentMethod({ onCheckPaymentMethod, defaultPayment }) {
       label: "Trả tiền mặt khi nhận hàng",
     },
     {
-      method: "paypal",
-      label: "Thanh toán qua paypal",
+      method: "visa",
+      label: "Thanh toán qua thẻ visa",
     },
   ];
 

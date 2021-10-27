@@ -33,7 +33,7 @@ export const update = createAsyncThunk("user/update", async (params, thunkAPI) =
     localStorage.setItem("user", JSON.stringify(newlocalStorageUser));
     return response.data;
   } catch (error) {
-    throw new Error(error.response && error.response.data.message);
+    throw new Error((error.response && error.response.data.message) || error.message);
   }
 });
 
@@ -106,6 +106,47 @@ export const getUserAddresses = createAsyncThunk(
       return userAddresses;
     } catch (error) {
       throw new Error(error.response && error.response.data.message);
+    }
+  }
+);
+
+/** ADMIN USER LIST */
+
+export const getUserList = createAsyncThunk("user/getUserList", async (params, thunkAPI) => {
+  try {
+    const response = await userApi.getUserList();
+    return response.data;
+  } catch (error) {
+    throw new Error((error.response && error.response.data.message) || error.message);
+  }
+});
+
+export const deleteUserById = createAsyncThunk("user/deleteUserById", async (params, thunkAPI) => {
+  try {
+    const response = await userApi.deleteUser(params);
+    return response.data;
+  } catch (error) {
+    throw new Error((error.response && error.response.data.message) || error.message);
+  }
+});
+
+export const getUserById = createAsyncThunk("user/getUserById", async (params, thunkAPI) => {
+  try {
+    const response = await userApi.getUserById(params);
+    return response.data;
+  } catch (error) {
+    throw new Error((error.response && error.response.data.message) || error.message);
+  }
+});
+
+export const updateUserById = createAsyncThunk(
+  "user/updateUserById",
+  async ({ id, updateUser: user }, thunkAPI) => {
+    try {
+      const response = await userApi.updateUserById(id, user);
+      return response.data;
+    } catch (error) {
+      throw new Error((error.response && error.response.data.message) || error.message);
     }
   }
 );

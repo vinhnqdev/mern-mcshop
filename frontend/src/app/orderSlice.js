@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createOrder, getOrderById, payOrder, getMyOrders } from "./orderThunk.js";
+import { createOrder, getOrderById, getMyOrders, deliverOrder } from "./orderThunk.js";
 const orderSlice = createSlice({
   name: "order",
   initialState: {
@@ -40,13 +40,13 @@ const orderSlice = createSlice({
       state.loading = false;
       state.orders = action.payload;
     },
-    [payOrder.pending]: (state) => {
+    [deliverOrder.pending]: (state) => {
       state.loading = true;
     },
-    [payOrder.rejected]: (state) => {
+    [deliverOrder.rejected]: (state) => {
       state.loading = false;
     },
-    [payOrder.fulfilled]: (state) => {
+    [deliverOrder.fulfilled]: (state) => {
       state.loading = false;
     },
   },

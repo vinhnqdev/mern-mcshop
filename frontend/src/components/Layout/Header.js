@@ -12,7 +12,7 @@ const Header = () => {
   }, 0);
 
   return (
-    <header className="fixed w-full top-0 z-50 bg-black text-white flex items-center justify-between px-5 py-7">
+    <header className="fixed z-50 top-0 w-full bg-black text-white flex items-center justify-between px-7 py-7">
       {/* Logo */}
       <div
         className="text-3xl font-semibold cursor-pointer tracking-wider"

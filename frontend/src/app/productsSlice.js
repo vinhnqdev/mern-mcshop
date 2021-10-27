@@ -1,24 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productApi from "../api/productApi";
+import { createSlice } from "@reduxjs/toolkit";
 
-export const getProducts = createAsyncThunk("products/getProducts", async (params, thunkAPI) => {
-  try {
-    const response = await productApi.get();
-    return response.data;
-  } catch (error) {
-    thunkAPI.dispatch(
-      productsActions.getProductFailed(error.response && error.response.data.message)
-    );
-    throw new Error();
-  }
-});
+import { getProducts } from "./productThunk";
 
 const productSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
     loading: false,
-    error: "",
   },
   reducers: {
     getProductFailed: (state, action) => {
@@ -29,11 +17,9 @@ const productSlice = createSlice({
     [getProducts.pending]: (state) => {
       state.loading = true;
     },
-    // [getProducts.rejected]: (state, action) => {
-    //   console.log("Action", action.error.response);
-    //   state.loading = false;
-    //   state.error = action.error;
-    // },
+    [getProducts.rejected]: (state, action) => {
+      state.loading = false;
+    },
     [getProducts.fulfilled]: (state, action) => {
       state.loading = false;
       state.products = action.payload;

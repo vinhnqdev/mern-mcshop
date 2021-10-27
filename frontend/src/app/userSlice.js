@@ -6,6 +6,8 @@ import {
   userDetail,
   addUserAddress,
   getUserAddresses,
+  getUserList,
+  deleteUserById,
 } from "./userThunk.js";
 
 const userSlice = createSlice({
@@ -15,12 +17,16 @@ const userSlice = createSlice({
     userDetail: {},
     userAddress: JSON.parse(localStorage.getItem("ad")) || {},
     userAddresses: [],
+    userList: [],
+
     loading: false,
   },
   reducers: {
     logout: (state) => {
       localStorage.removeItem("user");
       state.current = {};
+      state.userDetail = {};
+      state.userAddresses = [];
     },
     updateAddress: (state, action) => {
       state.userAddress = action.payload;
@@ -86,6 +92,25 @@ const userSlice = createSlice({
     [getUserAddresses.fulfilled]: (state, action) => {
       state.loading = false;
       state.userAddresses = action.payload;
+    },
+    [getUserList.pending]: (state) => {
+      state.loading = true;
+    },
+    [getUserList.rejected]: (state) => {
+      state.loading = false;
+    },
+    [getUserList.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.userList = action.payload;
+    },
+    [deleteUserById.pending]: (state) => {
+      state.loading = true;
+    },
+    [deleteUserById.rejected]: (state) => {
+      state.loading = false;
+    },
+    [deleteUserById.fulfilled]: (state, action) => {
+      state.loading = false;
     },
   },
 });

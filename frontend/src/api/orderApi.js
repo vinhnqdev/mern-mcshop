@@ -36,6 +36,27 @@ const orderApi = {
       },
     });
   },
+  getOrderList: () => {
+    const url = "/api/orders/";
+    return axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+  },
+  updateDeliveredStatus: (id) => {
+    const url = `/api/orders/${id}/delivered`;
+    return axios.patch(
+      url,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
+        },
+      }
+    );
+  },
 };
 
 export default orderApi;

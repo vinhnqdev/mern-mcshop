@@ -7,6 +7,7 @@ import PaymentMethod from "./PaymentMethod";
 import { createOrder } from "../../app/orderThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import { cartActions } from "../../app/cartSlice";
 function CheckoutCart() {
   const cart = useSelector((state) => state.cart.cart);
   const loading = useSelector((state) => state.order.loading);
@@ -39,9 +40,11 @@ function CheckoutCart() {
           shippingAddress,
           paymentMethod,
           totalPrice,
+          isPaid: paymentMethod === "visa",
         })
       );
       const order = unwrapResult(actionResult);
+      dispatch(cartActions.clearCart());
       history.push(`/checkout/success?order_code=${order._id}`);
     } catch (error) {
       toast.error(error.message);

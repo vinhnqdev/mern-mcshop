@@ -3,6 +3,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* .ant-message-notice .custom-message {
+    @apply font-mont text-right;
+  } */
+}
+
 .activeNav {
   font-weight: 600;
+}
+
+/*Custom Message Antd*/
+.custom-message {
+  font-family: "Montserrat";
+  display: flex;
+  justify-content: right;
+  text-align: right !important;
+}
+
+.custom-message > .ant-message-notice-content {
+  border-radius: 10px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+}
+
+.custom-message-success > .ant-message-notice-content {
+  border: 1px solid #c2e5cc;
+  background-color: #ebf8ee;
+}
+.custom-message-error > .ant-message-notice-content {
+  border: 1px solid red;
+  background-color: #feede9;
+}
+
+.custom-message .ant-message-custom-content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

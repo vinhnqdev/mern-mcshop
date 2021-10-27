@@ -1,3 +1,4 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
@@ -17,10 +18,18 @@ function Profile({ className }) {
     dispatch(userDetail());
   }, [dispatch]);
 
-  const handleUpdateForm = async ({ name, email, password }) => {
+  const handleUpdateForm = async (updateInfo) => {
+    console.log(details);
+    if (updateInfo.name === details.name) {
+      delete updateInfo.name;
+    }
+    if (updateInfo.email === details.email) {
+      delete updateInfo.email;
+    }
     try {
-      await dispatch(update({ name, email, password }));
-
+      const actionResult = await dispatch(update(updateInfo));
+      const result = await unwrapResult(actionResult);
+      console.log(result);
       toast.success("Update thành công");
     } catch (error) {
       toast.error(error.message);

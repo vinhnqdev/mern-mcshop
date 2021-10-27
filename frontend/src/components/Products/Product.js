@@ -5,7 +5,7 @@ import { ShoppingCartIcon, HeartIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import Rating from "./Rating";
 import { cartActions } from "../../app/cartSlice";
-const Product = ({ _id, image, name, price, discount, rating }) => {
+const Product = ({ _id, images, name, price, discount, rating }) => {
   const dispatch = useDispatch();
 
   const originalPrice = discount ? price + (price * discount) / 100 : price;
@@ -15,7 +15,7 @@ const Product = ({ _id, image, name, price, discount, rating }) => {
     dispatch(
       cartActions.addToCart({
         _id,
-        image,
+        image: images[0],
         name,
         price,
         discount,
@@ -26,10 +26,10 @@ const Product = ({ _id, image, name, price, discount, rating }) => {
 
   return (
     <li>
-      <Link to={`/products/${_id}`} className="block space-y-3 hover:shadow-lg p-3 group">
+      <Link to={`/products/${_id}`} className="flex flex-col space-y-3 shadow-lg p-3 group">
         {/* Img */}
         <div className="relative">
-          <img src={image} alt="" />
+          <img src={images[0]} alt="" />
           {(discount || discount !== 0) && (
             <span className="absolute z-20 block top-4 left-2 bg-yellow-400 px-5 rounded-full font-semibold">
               -{discount}%
@@ -52,20 +52,23 @@ const Product = ({ _id, image, name, price, discount, rating }) => {
 
         {/* Title */}
         <div>
-          <p className="text-sm">{name}</p>
+          <p className="text-sm truncate text-gray-800">{name}</p>
         </div>
         {/* Rating */}
         <Rating rating={rating} />
         {/* Price */}
-        <div className="space-y-2">
+        <div>
           <p className="bg-black inline-block text-white font-semibold px-2 rounded-sm">
             {formatCurrency(price, "vi-VN", "VND")}
           </p>
-          {(discount || discount !== 0) && (
-            <p className="text-sm text-gray-700 line-through px-2">
-              {formatCurrency(originalPrice, "vi-VN", "VND")}
-            </p>
-          )}
+
+          <p className={`text-sm text-gray-700 line-through px-2`}>
+            {discount === 0 ? (
+              <span className="opacity-0">0</span>
+            ) : (
+              formatCurrency(originalPrice, "vi-VN", "VND")
+            )}
+          </p>
         </div>
       </Link>
     </li>

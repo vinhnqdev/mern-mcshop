@@ -4,10 +4,13 @@ import queryString from "query-string";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderById } from "../app/orderThunk";
 import { formatShippingDate } from "../helpers/date";
+import Loading from "../components/UI/Loading";
 function SuccessOrderPage() {
   const location = useLocation();
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order.orderDetail);
+  const loading = useSelector((state) => state.order.loading);
+
   const { order_code } = queryString.parse(location.search);
 
   useEffect(() => {
@@ -15,6 +18,14 @@ function SuccessOrderPage() {
       dispatch(getOrderById(order_code));
     }
   }, [dispatch, order_code]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (Object.keys(order).length === 0) {
+    return <p>Opps!! Something went wrong</p>;
+  }
 
   return (
     <div className="bg-white shadow-2xl p-3 w-full max-w-5xl mx-auto lg:p-6">

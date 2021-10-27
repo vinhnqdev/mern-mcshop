@@ -11,13 +11,18 @@ export const formatShippingDate = (buyTime, shippingDays) => {
   return formattedDate;
 };
 
-export const formatReadableDate = (dateString) => {
-  return new Date(dateString).toLocaleString("vi-VN", {
+export const formatReadableDate = (
+  dateString,
+  config = {
     year: "numeric",
     month: "numeric",
     day: "numeric",
     weekday: "long",
     hour: "numeric",
     minute: "numeric",
-  });
+  }
+) => {
+  const date = new Date(dateString).toLocaleString("vi-VN", config);
+
+  return date;
 };

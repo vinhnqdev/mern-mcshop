@@ -25,8 +25,12 @@ function UpdateForm({ initialValues, onSubmit }) {
     resolver: yupResolver(schema),
   });
 
-  const submitHandler = (user) => {
-    onSubmit(user);
+  const submitHandler = ({ name, email, password }) => {
+    onSubmit({
+      name,
+      email,
+      password,
+    });
   };
 
   return (

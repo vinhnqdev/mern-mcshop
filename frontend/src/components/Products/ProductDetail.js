@@ -50,11 +50,11 @@ const ProductDetail = () => {
 
   if (!loading && product) {
     return (
-      <div className="grid grid-cols-1 space-y-8 md:grid-cols-2 gap-x-6">
+      <div className="grid grid-cols-1 space-y-8 md:grid-cols-5 lg:grid-cols-2 gap-x-6">
         {/* Left */}
-        <div className="flex flex-col sm:flex-row sm:gap-x-4">
-          <div>
-            <img src={product.images[image]} alt="" />
+        <div className="flex flex-col sm:flex-row sm:gap-x-4 md:col-span-3 lg:col-span-1">
+          <div className="w-3/4 mx-auto lg:px-3">
+            <img src={product.images[image]} alt="" className="w-full h-full" />
           </div>
           <ul className="flex space-x-4 items-center mt-5 overflow-scroll scrollbar-hide sm:order-first sm:flex-col sm:space-x-0 sm:space-y-2 sm:h-96 sm:overflow-scroll sm:px-3">
             {product.images.map((image, index) => (
@@ -70,7 +70,7 @@ const ProductDetail = () => {
         </div>
 
         {/* Right */}
-        <div>
+        <div className="md:col-span-2 lg:col-span-1">
           {/* Title */}
           <h2 className="text-2xl font-bold py-3 border-b border-gray-300 lg:text-3xl">
             {product.name}
@@ -128,8 +128,6 @@ const ProductDetail = () => {
         </div>
       </div>
     );
-  } else {
-    return <h1>Hello</h1>;
   }
 };
 
