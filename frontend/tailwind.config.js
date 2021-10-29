@@ -17,6 +17,9 @@ module.exports = {
       zIndex: {
         "-10": "-10",
       },
+      animation: {
+        slideDown: "slide-down 0.4s ease-in-out forwards",
+      },
     },
   },
   variants: {

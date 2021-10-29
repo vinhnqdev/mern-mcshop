@@ -6,9 +6,11 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: {
     cart: initialCart,
+    messageAction: "",
   },
   reducers: {
     addToCart: (state, action) => {
+      state.messageAction = "add";
       const addedItemIndex = state.cart.findIndex((item) => item._id === action.payload._id);
       if (addedItemIndex === -1) {
         state.cart.push({ ...action.payload, quantity: 1 });
@@ -18,11 +20,13 @@ const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     addToCartWithNumberForm: (state, action) => {
+      state.messageAction = "change";
       const item = state.cart.find((item) => item._id === action.payload._id);
       if (!item) return;
       item.quantity = action.payload.quantity;
     },
     removeToCart: (state, action) => {
+      state.messageAction = "remove";
       const _id = action.payload._id;
 
       const item = state.cart.find((item) => item._id === _id);
@@ -35,6 +39,7 @@ const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     clearItem: (state, action) => {
+      state.messageAction = "remove";
       const _id = action.payload;
       const index = state.cart.findIndex((item) => item._id === _id);
       if (index !== -1) {
@@ -43,6 +48,7 @@ const cartSlice = createSlice({
       }
     },
     clearCart: (state) => {
+      state.messageAction = "remove";
       localStorage.removeItem("cart");
       state.cart = [];
     },

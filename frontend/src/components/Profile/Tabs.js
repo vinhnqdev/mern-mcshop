@@ -17,7 +17,7 @@ function Tabs({ className }) {
         <NavLink
           to={`${routerMatch.path}/orders`}
           activeClassName="activeNav"
-          className="block w-full"
+          className="block w-full text-black hover:text-black"
         >
           Đơn hàng
         </NavLink>
@@ -27,7 +27,7 @@ function Tabs({ className }) {
         <NavLink
           to={`${routerMatch.path}/edit`}
           activeClassName="activeNav"
-          className="block w-full"
+          className="block w-full text-black hover:text-black"
         >
           Thông tin tài khoản
         </NavLink>
@@ -37,7 +37,7 @@ function Tabs({ className }) {
         <NavLink
           to={`${routerMatch.path}/address`}
           activeClassName="activeNav"
-          className="block w-full"
+          className="block w-full text-black hover:text-black"
         >
           Sổ địa chỉ
         </NavLink>
@@ -47,7 +47,7 @@ function Tabs({ className }) {
         <NavLink
           to={`${routerMatch.path}/logout`}
           activeClassName="activeNav"
-          className="block w-full"
+          className="block w-full text-black hover:text-black"
           onClick={handleLogout}
         >
           Đăng xuất

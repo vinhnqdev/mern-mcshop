@@ -11,7 +11,7 @@ const Rating = ({ rating, size }) => {
             .fill()
             .map((x, idx) => {
               return (
-                <li key={idx}>
+                <li key={idx} className="mb-3">
                   <StarIcon className={`${size === "medium" ? "h-5" : "h-4"} text-yellow-400`} />
                 </li>
               );

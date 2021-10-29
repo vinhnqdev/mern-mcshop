@@ -19,7 +19,7 @@ function AdminUpdateUserForm({ initialValues, onSubmit }) {
     onSubmit(updateUser);
   };
 
-  const defaultAddressData = [{ value: false, label: "Admin" }];
+  const defaultAddressData = [{ value: true, label: "Admin" }];
 
   return (
     <div className="max-w-xl mx-auto">

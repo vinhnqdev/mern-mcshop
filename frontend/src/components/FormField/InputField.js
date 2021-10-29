@@ -18,7 +18,7 @@ function InputField({ label, name, control, ...inputProps }) {
         className={`w-full border ${invalid ? "border-red-500" : "border-gray-400"} text-md p-2`}
       />
       {/** Error Message */}
-      {error && <div className="text-sm mt-1 text-red-600">*{error?.message}</div>}
+      {error && <div className="text-xs mt-1 text-red-600">*{error?.message}</div>}
     </div>
   );
 }

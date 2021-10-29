@@ -1,11 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "antd";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useRef, useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
 
 import InputField from "../FormField/InputField";
 import * as yup from "yup";
-import TextAreaField from "../FormField/TextAreaField";
 import SelectField from "../FormField/SelectField";
 import { useDispatch, useSelector } from "react-redux";
 import { selectBrandOptions } from "../../app/brandSlice";
@@ -14,7 +13,7 @@ import { getCategoryList } from "../../app/categoryThunk";
 import { selectCategoryOptions } from "../../app/categorySlice";
 import axios from "axios";
 import Loading from "../UI/Loading";
-import { XIcon } from "@heroicons/react/solid";
+import { XIcon, PlusIcon } from "@heroicons/react/solid";
 import { updateProduct } from "../../app/productThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 
@@ -33,13 +32,32 @@ const formatCurrencyInput = (inputNum) => {
     .join("");
 };
 const schema = yup.object().shape({
-  name: yup.string().required("Tên là bắt buộc").max(30, "Tên phải ngắn hơn 20 kí tự"),
+  name: yup.string().required("* Tên là bắt buộc"),
+  descriptions: yup
+    .array()
+    .min(1, "* Cần ít nhất một mô tả cho sản phẩm")
+    .of(
+      yup.object().shape({
+        description: yup.string().required("* Vui lòng nhập mô tả cho sản phẩm"),
+      })
+    ),
+  brand: yup.string().required("Lựa chọn thương hiệu sản phẩm"),
+  category: yup.string().required("Lựa chọn loại sản phẩm"),
+  countInStock: yup.number().integer("Vui lòng nhập số nguyên dương"),
+  guaranteeNum: yup.number().min(0, "Vui lòng nhập số tháng dương"),
+  discount: yup
+    .number()
+    .moreThan(-1, "Vui lòng nhập số lớn hơn 0")
+    .lessThan(101, "Vui lòng nhấp số nhỏ hơn 100"),
 });
 
 function AddEditProductForm({ initialValues, onSubmit, productId }) {
+  const inputPriceRef = useRef();
   const [images, setImages] = useState(initialValues.images);
+  const [imagesError, setImagesError] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [price, setPrice] = useState(formatCurrencyInput(initialValues.price));
+  const [price, setPrice] = useState(formatCurrencyInput(""));
+  const [priceError, setPriceError] = useState("");
 
   const brandOption = useSelector(selectBrandOptions);
   const categoryOption = useSelector(selectCategoryOptions);
@@ -51,15 +69,52 @@ function AddEditProductForm({ initialValues, onSubmit, productId }) {
     dispatch(getCategoryList());
   }, [dispatch]);
 
-  const { control, handleSubmit } = useForm({
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(schema),
   });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "descriptions",
+  });
+
   const submitHandler = (products) => {
+    const formatPrice = Number(price.split(",").join(""));
+
+    if (isNaN(formatPrice)) {
+      setPriceError("Vui lòng nhập số");
+      inputPriceRef.current.focus();
+      return;
+    }
+    // Check validate Price
+    if (price === "") {
+      setPriceError("Giá là băt buộc");
+      inputPriceRef.current.focus();
+      return;
+    }
+    if (formatPrice < 0) {
+      setPriceError("Vui lòng nhập số nguyên dương");
+      inputPriceRef.current.focus();
+      return;
+    }
+
+    if (images.length === 0) {
+      setImagesError("* Chọn ít nhất một hình cho sản phẩm");
+      return;
+    }
+
+    setPriceError("");
+
     onSubmit({
       ...products,
       images,
-      price: Number(price.split(",").join("")),
+      price: formatPrice,
     });
   };
 
@@ -117,18 +172,24 @@ function AddEditProductForm({ initialValues, onSubmit, productId }) {
       <form className="space-y-5">
         <InputField name="name" control={control} label="Tên sản phẩm *" />
 
+        {/** Price */}
         <div>
-          <label htmlFor="">Giá *</label>
+          <label htmlFor="price-pruduct">Giá *</label>
           <div className="relative">
             <input
               type="text"
+              id="price-pruduct"
               value={price}
+              ref={inputPriceRef}
               className="w-full border border-gray-400 text-md py-2 px-5 absolute"
               onChange={handleInputCurrencyChange}
             />
             <span className="absolute top-2 left-2">&#8363;</span>
           </div>
+          {<div className="text-sm mt-12 text-red-600">{priceError && `*${priceError}`}</div>}
         </div>
+
+        {/** Image Upload */}
 
         <div>
           <label htmlFor="product-file-input" className="block mb-2">
@@ -147,9 +208,52 @@ function AddEditProductForm({ initialValues, onSubmit, productId }) {
               </li>
             ))}
           </ul>
+          {imagesError && <div className="text-xs text-red-600">{imagesError}</div>}
         </div>
 
-        <TextAreaField name="description" control={control} label="Mô tả" />
+        {/** Descriptions */}
+        <div className="space-y-2">
+          <label htmlFor="" className="block">
+            Descriptions
+          </label>
+          {fields.length === 0 && (
+            <Button
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}
+              type="primary"
+              icon={<PlusIcon className="w-4 h-4 inline-block" />}
+              block
+              onClick={() => append({})}
+            >
+              Thêm mô tả
+            </Button>
+          )}
+          {fields.map((item, index) => (
+            <div key={item.id}>
+              <div className="flex items-center gap-x-2">
+                <input
+                  className="w-full border border-gray-400 text-md p-1"
+                  {...register(`descriptions.${index}.description`)}
+                />
+                <Button type="primary" onClick={() => append({})}>
+                  Thêm
+                </Button>
+                <Button danger onClick={() => remove(index)}>
+                  Xoá
+                </Button>
+              </div>
+              {errors.descriptions && (
+                <div className="text-xs mt-1 text-red-600">
+                  {errors.descriptions[index]?.description.message}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {errors.descriptions && (
+            <div className="text-xs mt-12 text-red-600">{errors.descriptions.message}</div>
+          )}
+        </div>
+
         <SelectField
           name="brand"
           control={control}

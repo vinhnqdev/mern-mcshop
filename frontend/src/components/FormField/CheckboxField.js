@@ -7,6 +7,8 @@ function CheckBoxField({ labelId, name, control, checkboxArray = [] }) {
     fieldState: { error },
   } = useController({ name, control });
 
+  console.log(field.value);
+
   return (
     <div className="space-y-1">
       {checkboxArray.map((checkbox) => (
@@ -17,9 +19,6 @@ function CheckBoxField({ labelId, name, control, checkboxArray = [] }) {
             }`}
           >
             {field.value === checkbox.value && <CheckIcon className="text-white" />}
-            {/* <span
-              className={`${field.value === checkbox.value && "block w-full h-full bg-black"}`}
-            ></span> */}
           </div>
           <input
             type="checkbox"

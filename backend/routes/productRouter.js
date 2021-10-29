@@ -69,6 +69,7 @@ router.patch(
   auth,
   admin,
   asyncHandler(async (req, res) => {
+    console.log("RUNNING");
     const product = await Product.findById(req.params.id);
     if (!product) {
       res.status(404);
@@ -76,11 +77,12 @@ router.patch(
     }
 
     const productBodyField = Object.keys(req.body);
+
     const productModelField = [
       "name",
       "price",
       "images",
-      "description",
+      "descriptions",
       "brand",
       "category",
       "countInStock",

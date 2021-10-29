@@ -92,7 +92,6 @@ export const getUserAddresses = createAsyncThunk(
       const defaultAddress = addressList[defaultAddressIndex];
       const newAddressList = addressList.filter((address, index) => index !== defaultAddressIndex);
       newAddressList.unshift(defaultAddress);
-
       const userAddresses = newAddressList.map((address) => {
         const provice = listProvince.find((provice) => provice.code === +address.city).name;
         const district = listDistrict.find((district) => district.code === +address.district).name;

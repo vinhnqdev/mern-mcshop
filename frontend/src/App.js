@@ -1,24 +1,23 @@
-import { Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
+import { Route, Switch } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
+import AdminRoute from "./components/PrivateRoutes/AdminRoute";
+import PrivateRoute from "./components/PrivateRoutes/PrivateRoute";
+import AddEditProductPage from "./pages/AddEditProductPage";
 import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-
-import ProductDetailPage from "./pages/ProductDetailPage";
-import PrivateRoute from "./components/PrivateRoutes/PrivateRoute";
-import ProfilePage from "./pages/ProfilePage";
-import ShippingPage from "./pages/ShippingPage";
-import PlaceOrderPage from "./pages/PlaceOrderPage";
-import SuccessOrderPage from "./pages/SuccessOrderPage";
-import UserAdminPage from "./pages/UserAdminPage";
-import AdminRoute from "./components/PrivateRoutes/AdminRoute";
-import UserAdminUpdatePage from "./pages/UserAdminUpdatePage";
-import ProductAdminPage from "./pages/ProductAdminPage";
-import AddEditProductPage from "./pages/AddEditProductPage";
 import OrderAdminPage from "./pages/OrderAdminPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
+import PlaceOrderPage from "./pages/PlaceOrderPage";
+import ProductAdminPage from "./pages/ProductAdminPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import ProfilePage from "./pages/ProfilePage";
+import RegisterPage from "./pages/RegisterPage";
+import ShippingPage from "./pages/ShippingPage";
+import SuccessOrderPage from "./pages/SuccessOrderPage";
+import UserAdminPage from "./pages/UserAdminPage";
+import UserAdminUpdatePage from "./pages/UserAdminUpdatePage";
 
 function App() {
   return (

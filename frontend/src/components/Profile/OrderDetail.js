@@ -163,9 +163,11 @@ function OrderDetail({ isAdmin }) {
         </div>
       </div>
 
-      <div className="mt-3 text-blue-500 text-sm">
-        <Link to="/admin/order-list">Quay lại quản lý đơn hàng</Link>
-      </div>
+      {isAdmin && (
+        <div className="mt-3 text-blue-500 text-sm">
+          <Link to="/admin/order-list">Quay lại quản lý đơn hàng</Link>
+        </div>
+      )}
     </div>
   );
 }

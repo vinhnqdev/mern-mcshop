@@ -25,7 +25,7 @@ function SelectField({ label, name, control, optionsArray = [] }) {
         ))}
       </select>
       {/** Error Message */}
-      {error && <div className="text-sm mt-1 text-red-600">*{error?.message}</div>}
+      {error && <div className="text-xs mt-1 text-red-600">*{error?.message}</div>}
     </div>
   );
 }

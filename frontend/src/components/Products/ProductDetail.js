@@ -54,7 +54,7 @@ const ProductDetail = () => {
         {/* Left */}
         <div className="flex flex-col sm:flex-row sm:gap-x-4 md:col-span-3 lg:col-span-1">
           <div className="w-3/4 mx-auto lg:px-3">
-            <img src={product.images[image]} alt="" className="w-full h-full" />
+            <img src={product.images[image]} alt="" className="w-full" />
           </div>
           <ul className="flex space-x-4 items-center mt-5 overflow-scroll scrollbar-hide sm:order-first sm:flex-col sm:space-x-0 sm:space-y-2 sm:h-96 sm:overflow-scroll sm:px-3">
             {product.images.map((image, index) => (
@@ -122,7 +122,9 @@ const ProductDetail = () => {
               </span>
             </p>
             <ul className="list-disc list-inside pl-5">
-              <li>{product.description}</li>
+              {product.descriptions.map((desc, index) => (
+                <li key={desc._id}>{desc.description}</li>
+              ))}
             </ul>
           </div>
         </div>

@@ -35,10 +35,13 @@ const productSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
+    descriptions: [
+      {
+        description: {
+          type: String,
+        },
+      },
+    ],
     brand: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -48,6 +51,10 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Category",
+    },
+    soldNum: {
+      type: Number,
+      default: 0,
     },
     discount: {
       type: Number,
