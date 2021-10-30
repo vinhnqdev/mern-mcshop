@@ -27,7 +27,7 @@ const Product = ({ _id, images, name, price, discount, rating }) => {
     <li>
       <Link
         to={`/products/${_id}`}
-        className="flex flex-col space-y-3  p-3 transition transform hover:shadow-lg group"
+        className="flex flex-col space-y-3 p-3 transition transform hover:shadow-lg group"
       >
         {/* Img */}
         <div className="relative">

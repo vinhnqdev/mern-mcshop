@@ -37,7 +37,7 @@ const ListProduct = () => {
 
   return (
     <section>
-      <h2 className="text-2xl font-bold uppercase">BEST SALLER</h2>
+      <h2 className="text-2xl px-1 font-bold uppercase">BEST SALLER</h2>
       {loading && <Loading />}
       {!loading && products && (
         <Swiper
@@ -52,7 +52,7 @@ const ListProduct = () => {
           breakpoints={breakpoints}
           loop={true}
           autoplay={{
-            delay: 2500,
+            delay: 3000,
             disableOnInteraction: false,
           }}
         >

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
 import addressApi from "../api/addressApi";
 import cityApi from "../api/cityApi";
 import userApi from "../api/userApi";
@@ -77,32 +78,24 @@ export const getUserAddresses = createAsyncThunk(
   "user/getUserAddresses",
   async (params, thunkAPI) => {
     try {
-      const { data: listProvince } = await cityApi.getListProvice();
-      const { data: listDistrict } = await cityApi.getListDistrict();
-      const { data: listWard } = await cityApi.getListWard();
-
-      if (!listProvince || !listDistrict || !listWard) {
-        throw new Error("Something went wrong!");
-      }
-
       const { data: addressList } = await addressApi.getAll();
 
-      // Logic move default address at the first elem of the list
       const defaultAddressIndex = addressList.findIndex((address) => address.isDefault);
       const defaultAddress = addressList[defaultAddressIndex];
       const newAddressList = addressList.filter((address, index) => index !== defaultAddressIndex);
       newAddressList.unshift(defaultAddress);
-      const userAddresses = newAddressList.map((address) => {
-        const provice = listProvince.find((provice) => provice.code === +address.city).name;
-        const district = listDistrict.find((district) => district.code === +address.district).name;
-        const ward = listWard.find((ward) => ward.code === +address.ward).name;
 
+      const formatedAddressList = newAddressList.map(async (address) => {
+        const { data: province } = await cityApi.getProviceByCode(address.city);
+        const { data: district } = await cityApi.getDistrictByCode(address.district);
+        const { data: ward } = await cityApi.getWardByCode(address.ward);
         return {
           ...address,
-          userAddress: `${address.address}, ${ward}, ${district}, ${provice}, Việt Nam.`,
+          userAddress: `${address.address}, ${ward.name}, ${district.name}, ${province.name}, Việt Nam.`,
         };
       });
-      return userAddresses;
+
+      return await Promise.all(formatedAddressList);
     } catch (error) {
       throw new Error(error.response && error.response.data.message);
     }

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { formatCurrency } from "../../helpers/";
 import CartItem from "./CartItem";
 import { useHistory } from "react-router-dom";
+import { Empty, Button } from "antd";
 function Cart() {
   const cart = useSelector((state) => state.cart.cart);
 
@@ -21,8 +22,10 @@ function Cart() {
       {/** Cart */}
       <div className="lg:col-span-4">
         <div className="flex items-center space-x-5 lg:grid lg:grid-cols-6 lg:space-x-0">
-          <div className="lg:col-span-4 lg:flex items-center space-x-8">
-            <h3 className="text-xl uppercase font-semibold lg:text-3xl lg:font-bold">Giỏ hàng</h3>
+          <div className="lg:col-span-4 lg:flex lg:items-center space-x-8">
+            <h3 className="text-xl uppercase font-semibold mb-0 lg:text-3xl lg:font-bold">
+              Giỏ hàng
+            </h3>
 
             <span className="hidden lg:inline-block uppercase text-gray-500 text-lg">
               {`( ${itemQuantity} Sản phẩm )`}
@@ -35,7 +38,21 @@ function Cart() {
 
         {/** Cart List */}
         {cart.length === 0 ? (
-          <p>Giỏ hàng rỗng</p>
+          <Empty
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              marginTop: 60,
+            }}
+            description="Không có sản phẩm nào trong giỏ hàng của bạn"
+            image="/images/empty-cart.png"
+            imageStyle={{ height: 150 }}
+          >
+            <Button type="primary" onClick={() => history.push("/")}>
+              Tiếp tục mua sắm
+            </Button>
+          </Empty>
         ) : (
           <div className="bg-white shadow-xl mt-5">
             <ul className="space-y-5 px-4 py-5">

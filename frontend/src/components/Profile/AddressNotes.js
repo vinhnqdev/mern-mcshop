@@ -6,8 +6,8 @@ import UserAddressList from "../Checkout/UserAddressList";
 function AddressNotes() {
   const userAddresses = useSelector((state) => state.user.userAddresses);
   const dispatch = useDispatch();
-
   const loading = useSelector((state) => state.user.loading);
+
   useEffect(() => {
     dispatch(getUserAddresses());
   }, [dispatch]);

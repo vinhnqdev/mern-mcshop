@@ -18,7 +18,6 @@ const userSlice = createSlice({
     userAddress: JSON.parse(localStorage.getItem("ad")) || {},
     userAddresses: [],
     userList: [],
-
     loading: false,
   },
   reducers: {

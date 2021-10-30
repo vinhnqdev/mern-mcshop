@@ -3,12 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  /* .ant-message-notice .custom-message {
-    @apply font-mont text-right;
-  } */
-}
-
 .activeNav {
   font-weight: 600;
 }
@@ -22,6 +16,10 @@
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 12px solid white;
+}
+
+.swiper-container {
+  padding: 0 5px !important;
 }
 
 @keyframes slide-down {
