@@ -1,4 +1,4 @@
-import "antd/dist/antd.css";
+import "./App.less";
 import { Route, Switch } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import AdminRoute from "./components/PrivateRoutes/AdminRoute";

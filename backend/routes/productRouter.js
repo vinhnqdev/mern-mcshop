@@ -10,11 +10,54 @@ const router = express.Router();
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const products = await Product.find({})
+    const search = req.query.search
+      ? {
+          name: {
+            $regex: req.query.search,
+            $options: "i",
+          },
+        }
+      : {};
+
+    const products = await Product.find({ ...search })
       .populate({ path: "category", select: "name" })
       .populate({ path: "brand", select: "name" });
 
     res.send(products);
+  })
+);
+
+// @desc    Product Review
+// @route   POST /api/products/:id/review
+// @access   POST Private
+
+router.post(
+  "/:id/review",
+  auth,
+  asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+
+    const productReviewedByUser = product.reviews.find(
+      (review) => review.user.toString() === req.user._id.toString()
+    );
+    if (productReviewedByUser) {
+      return res.status(400).send({ message: "You reviewed for this product" });
+    }
+
+    const { title, rating, comment } = req.body;
+    const review = {
+      name: req.user.name,
+      title,
+      rating,
+      comment,
+      user: req.user._id,
+    };
+    product.reviews.push(review);
+    product.numReview += 1;
+    product.rating =
+      product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length;
+    await product.save();
+    res.status(201).send({ message: "Bình luận thành công" });
   })
 );
 

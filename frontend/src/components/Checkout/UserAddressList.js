@@ -1,13 +1,20 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
-
+import { useHistory, useRouteMatch } from "react-router";
 import { userActions } from "../../app/userSlice";
 import Loading from "../UI/Loading";
 
-function UserAddressList({ loading, userAddresses, isAddBook }) {
+function UserAddressList({
+  loading,
+  userAddresses,
+  isAddressBook,
+  onRemove,
+  onEdit,
+  redirectAction,
+}) {
   const history = useHistory();
   const dispatch = useDispatch();
+  const routeMatch = useRouteMatch();
 
   const handleShippingAddress = (_id) => {
     const address = userAddresses.find((address) => address._id === _id);
@@ -49,7 +56,7 @@ function UserAddressList({ loading, userAddresses, isAddBook }) {
             <p className="text-sm">Điện thoại: {phone}</p>
 
             <div className="space-x-3 mt-2">
-              {!isAddBook && (
+              {!isAddressBook && (
                 <button
                   className={`text-sm text-white border border-transparent rounded-sm py-1 px-3 ${
                     isDefault ? "bg-yellow-400" : "bg-gray-600"
@@ -60,8 +67,24 @@ function UserAddressList({ loading, userAddresses, isAddBook }) {
                 </button>
               )}
 
-              <button className={`text-sm py-1 rounded-sm px-3 border border-gray-500`}>Sửa</button>
-              <button className={`text-sm py-1 rounded-sm px-3 border border-gray-500`}>Xoá</button>
+              <button
+                onClick={
+                  redirectAction
+                    ? () => history.push(`${routeMatch.path}/${_id}`)
+                    : () => onEdit(_id)
+                }
+                className={`text-sm py-1 rounded-sm px-3 border border-gray-500`}
+              >
+                Sửa
+              </button>
+              {!isDefault && (
+                <button
+                  onClick={() => onRemove(_id)}
+                  className={`text-sm py-1 rounded-sm px-3 border border-gray-500`}
+                >
+                  Xoá
+                </button>
+              )}
             </div>
           </li>
         ))}

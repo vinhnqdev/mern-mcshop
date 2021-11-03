@@ -6,19 +6,52 @@ import { cartActions } from "../../app/cartSlice";
 import { getProductDetail } from "../../app/productDetailSlice";
 import { formatCurrency } from "../../helpers";
 import Loading from "../UI/Loading";
-import Rating from "./Rating";
+import CustomRating from "./Rating";
+import { Button, Drawer } from "antd";
+import ReviewList from "./ReviewList";
+import Review from "./Review";
+
 const ProductDetail = () => {
   const [image, setImage] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(
+    window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+  );
+
+  /** AntD State*/
+  const [visibleDrawer, setVisibleDrawer] = useState(false);
+
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading, product } = useSelector((state) => state.productDetails);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(
+        window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+      );
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchProduct = async () => {
       dispatch(getProductDetail(id));
     };
     fetchProduct();
   }, [dispatch, id]);
+
+  const showDrawer = () => {
+    setVisibleDrawer(true);
+  };
+
+  const onCloseDrawer = () => {
+    setVisibleDrawer(false);
+  };
 
   const handleChangeImage = (index) => {
     setImage(index);
@@ -51,8 +84,8 @@ const ProductDetail = () => {
   if (!loading && product) {
     return (
       <div className="grid grid-cols-1 space-y-8 md:grid-cols-5 lg:grid-cols-2 gap-x-6">
-        {/* Left */}
-        <div className="flex flex-col sm:flex-row sm:gap-x-4 md:col-span-3 lg:col-span-1">
+        {/* Image Show */}
+        <div className="flex place-self-center flex-col sm:flex-row sm:gap-x-4 md:col-span-3 lg:col-span-1">
           <div className="w-3/4 mx-auto lg:px-3">
             <img src={product.images[image]} alt="" className="w-full" />
           </div>
@@ -69,7 +102,7 @@ const ProductDetail = () => {
           </ul>
         </div>
 
-        {/* Right */}
+        {/* Product Details */}
         <div className="md:col-span-2 lg:col-span-1">
           {/* Title */}
           <h2 className="text-2xl font-bold py-3 border-b border-gray-300 lg:text-3xl">
@@ -89,7 +122,7 @@ const ProductDetail = () => {
             </p>
             <span>Số lượng còn lại: {product.countInStock}</span>
 
-            <Rating rating={product.rating} size="medium" />
+            <CustomRating rating={product.rating} size="medium" />
 
             <div className="flex items-center">
               <button
@@ -128,6 +161,38 @@ const ProductDetail = () => {
             </ul>
           </div>
         </div>
+        {/* Review */}
+
+        <ReviewList
+          reviewList={product.reviews.slice(0, 3)}
+          averageRating={product.rating}
+          totalReview={[product.numReview]}
+        />
+        {product.reviews.length !== 0 && (
+          <div>
+            <Button style={{ fontSize: 13 }} size="large" onClick={showDrawer}>
+              Xem tất cả bình luận
+            </Button>
+          </div>
+        )}
+
+        <Drawer
+          title="Reviews"
+          placement="right"
+          // className="drawer-width"
+          contentWrapperStyle={{
+            fontFamily: "'Montserrat', sans-serif",
+            width: screenWidth > 768 ? 768 : "100%",
+          }}
+          onClose={onCloseDrawer}
+          visible={visibleDrawer}
+        >
+          <ul className="space-y-7">
+            {product.reviews.map((review) => (
+              <Review review={review} key={review._id} />
+            ))}
+          </ul>
+        </Drawer>
       </div>
     );
   }

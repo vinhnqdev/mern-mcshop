@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { cartActions } from "../../app/cartSlice";
 import { formatCurrency } from "../../helpers/index";
 import Rating from "./Rating";
-const Product = ({ _id, images, name, price, discount, rating }) => {
+const Product = ({ _id, images, name, price, discount, rating, searchView }) => {
   const dispatch = useDispatch();
 
   // const originalPrice = discount ? price + (price * discount) / 100 : price;
@@ -78,14 +78,16 @@ const Product = ({ _id, images, name, price, discount, rating }) => {
         </div>
 
         {/* Actions */}
-        <div className="relative flex items-center">
-          <button
-            className="btn-add-to-cart bg-black text-white text-xs w-1/2 rounded-sm py-2 font-semibold transition hover:bg-gray-900"
-            onClick={handleAddToCart}
-          >
-            BUY NOW
-          </button>
-        </div>
+        {!searchView && (
+          <div className="relative flex items-center">
+            <button
+              className="btn-add-to-cart bg-black text-white text-xs w-1/2 rounded-sm py-2 font-semibold transition hover:bg-gray-900"
+              onClick={handleAddToCart}
+            >
+              BUY NOW
+            </button>
+          </div>
+        )}
       </Link>
     </li>
   );

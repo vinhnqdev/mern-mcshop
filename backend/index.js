@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import dotenv from "dotenv";
 import path from "path";
 import connectDB from "./db/mongoose.js";
@@ -16,6 +17,10 @@ const PORT = process.env.port || 5000;
 
 dotenv.config();
 connectDB();
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 app.use(express.json());
 

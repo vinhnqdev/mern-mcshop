@@ -1,8 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { SearchIcon, UserIcon, ShoppingCartIcon, CheckIcon, XIcon } from "@heroicons/react/solid";
+import {
+  SearchIcon,
+  UserIcon,
+  ShoppingCartIcon,
+  CheckIcon,
+  XIcon,
+  ViewListIcon,
+} from "@heroicons/react/solid";
 import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
+import { Drawer } from "antd";
+import SearchTop from "./SearchTop";
 const Header = () => {
   const history = useHistory();
   const firstRender = useRef(true);
@@ -11,6 +20,9 @@ const Header = () => {
   const { user } = useSelector((state) => state.user.current);
   const cart = useSelector((state) => state.cart.cart);
   const messageAction = useSelector((state) => state.cart.messageAction);
+
+  const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const [visibleSearchTop, setVisibleSearchTop] = useState(false);
 
   const cartQuantity = cart.reduce((acc, product) => {
     return acc + product.quantity;
@@ -35,32 +47,34 @@ const Header = () => {
     }, 3000);
   }, [cart, messageAction]);
 
-  return (
-    <header className="fixed z-30 top-0 left-0 right-0 bg-black text-white flex items-center justify-between px-7 h-24">
-      {/* Logo */}
-      <div
-        className="text-3xl font-semibold cursor-pointer tracking-wider"
-        onClick={() => history.push("/")}
-      >
-        MCSHOP
-      </div>
-      {/* Search */}
-      <div className="flex-1 hidden items-stretch px-10 sm:flex justify-center">
-        <input
-          type="text"
-          placeholder="Tìm kiếm sản phẩm"
-          className="w-full max-w-3xl text-black text-sm p-3 border-none font-mont placeholder-gray-600 rounded-l-md outline-none"
-        />
-        <div className="bg-yellow-400 cursor-pointer w-12 rounded-r-md flex items-center justify-center">
-          <SearchIcon className="h-7" />
-        </div>
-      </div>
+  const onCloseDrawer = () => {
+    setVisibleDrawer(false);
+  };
 
+  const onCloseSearchTop = () => {
+    setVisibleSearchTop(false);
+  };
+
+  const showDrawer = () => {
+    setVisibleDrawer(true);
+  };
+
+  const showSearchTop = () => {
+    setVisibleSearchTop(true);
+  };
+
+  return (
+    <header className="fixed z-30 top-0 left-0 right-0 bg-black text-white flex items-center justify-between px-7 h-20 md:h-24">
+      {/* Logo */}
+      <div className="text-xl sm:text-2xl md:text-3xl font-semibold cursor-pointer tracking-wider flex items-center space-x-2">
+        <ViewListIcon onClick={showDrawer} className="w-6 h-6 cursor-pointer md:hidden" />
+        <span onClick={() => history.push("/")}>MCSHOP</span>
+      </div>
       {/* Login and Cart */}
       <div className="flex items-center space-x-3 self-stretch">
         {user && (
           <span
-            className="cursor-pointer hover:underline"
+            className="cursor-pointer hover:underline hidden md:inline-block"
             onClick={() => history.push("/profile/edit")}
           >
             Hello {user.name}
@@ -74,6 +88,14 @@ const Header = () => {
             />
           </div>
         )}
+
+        <div>
+          <SearchIcon
+            onClick={showSearchTop}
+            className="bg-white rounded-full text-black cursor-pointer p-2 h-11"
+          />
+        </div>
+
         <div className="relative flex items-center p-1 h-full">
           <ShoppingCartIcon
             className={`h-11 rounded-full bg-white text-black cursor-pointer p-2 transition transform ${
@@ -83,7 +105,7 @@ const Header = () => {
           />
 
           {/** Cart items quantity */}
-          <span className="absolute right-0 top-6 flex items-center justify-center text-black text-xs font-semibold w-5 h-5 rounded-full bg-yellow-400">
+          <span className="absolute right-0 top-4 md:top-6 flex items-center justify-center text-black text-xs font-semibold w-5 h-5 rounded-full bg-yellow-400">
             {cartQuantity}
           </span>
 
@@ -114,6 +136,20 @@ const Header = () => {
           )}
         </div>
       </div>
+      <Drawer
+        title="Reviews"
+        placement="left"
+        contentWrapperStyle={{
+          fontFamily: "'Montserrat', sans-serif",
+          width: "100%",
+        }}
+        onClose={onCloseDrawer}
+        visible={visibleDrawer}
+      >
+        Hello
+      </Drawer>
+
+      <SearchTop onClose={onCloseSearchTop} visible={visibleSearchTop} />
     </header>
   );
 };

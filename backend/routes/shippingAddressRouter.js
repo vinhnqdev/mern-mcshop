@@ -37,6 +37,22 @@ router.post(
   })
 );
 
+// @desc    Get user address by id
+// @route   GET /api/addresses/me/:id
+// @access  Private
+router.get(
+  "/me/:id",
+  auth,
+  asyncHandler(async (req, res) => {
+    const address = await ShippingAddress.find({ user: req.user._id, _id: req.params.id });
+    if (address.length === 0) {
+      res.status(404);
+      throw Error("Không tìm thấy địa chỉ");
+    }
+    res.send(address[0]);
+  })
+);
+
 // @desc    Update My Address
 // @route   PATCH /api/addresses/me/:id
 // @access  Private
@@ -46,31 +62,24 @@ router.patch(
   auth,
   asyncHandler(async (req, res) => {
     const address = await ShippingAddress.findById(req.params.id);
-
-    // Kiểm tra các trường req.body gửi lên có khớp với các trường trong model không?
-    const addressBodyField = Object.keys(req.body);
-    const userModelField = [
-      "name",
-      "phone",
-      "city",
-      "district",
-      "ward",
-      "address",
-      "typeOfAddress",
-      "isDefault",
-    ];
-
-    const isValidOperation = addressBodyField.every((field) => userModelField.includes(field));
-
-    if (!isValidOperation) {
-      res.status(400);
-      throw new Error("Invalid update");
+    const userAddresses = await ShippingAddress.find({ user: req.user._id });
+    let addressBodyField = Object.keys(req.body);
+    if (address.isDefault && !req.body.isDefault) {
+      addressBodyField = addressBodyField.filter((addressField) => addressField !== "isDefault");
+    }
+    if (req.body.isDefault && !address.isDefault) {
+      userAddresses.forEach(async (address) => {
+        if (address.isDefault) {
+          address.isDefault = false;
+          await address.save();
+        }
+      });
     }
 
     addressBodyField.forEach((field) => (address[field] = req.body[field]));
+
     try {
       await address.save();
-
       res.send(address);
     } catch (error) {
       res.status(500);
@@ -95,7 +104,7 @@ router.delete(
       res.send({ message: "User deleted" });
     } else {
       res.status(400);
-      res.send({ message: "Failed to delete user" });
+      res.send({ message: "Xoá địa chỉ thất bại" });
     }
   })
 );

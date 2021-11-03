@@ -37,6 +37,15 @@ const productApi = {
       },
     });
   },
+  reviewProduct: (review, id) => {
+    const url = `/api/products/${id}/review`;
+    return axios.post(url, review, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+  },
 };
 
 export default productApi;

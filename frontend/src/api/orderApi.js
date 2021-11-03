@@ -19,9 +19,10 @@ const orderApi = {
       },
     });
   },
-  getMyOrders: () => {
+  getMyOrders: (params) => {
     const url = "/api/orders/me";
     return axios.get(url, {
+      params,
       headers: {
         Authorization: `Bearer ${getToken()}`,
       },

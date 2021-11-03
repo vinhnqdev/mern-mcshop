@@ -7,8 +7,6 @@ function CheckBoxField({ labelId, name, control, checkboxArray = [] }) {
     fieldState: { error },
   } = useController({ name, control });
 
-  console.log(field.value);
-
   return (
     <div className="space-y-1">
       {checkboxArray.map((checkbox) => (

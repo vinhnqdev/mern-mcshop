@@ -21,7 +21,8 @@ export const getOrderById = createAsyncThunk("order/getOrderById", async (params
 
 export const getMyOrders = createAsyncThunk("order/getMyOrders", async (params, thunkAPI) => {
   try {
-    const response = await orderApi.getMyOrders();
+    const response = await orderApi.getMyOrders(params);
+
     const orders = [];
     response.data.forEach((order) => {
       order.orderItems.forEach((item) => {

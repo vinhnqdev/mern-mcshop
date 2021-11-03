@@ -34,20 +34,20 @@
 }
 
 /*Custom Message Antd*/
+/*Message*/
+
 .custom-message {
   font-family: "Montserrat";
   display: flex;
   justify-content: right;
   text-align: right !important;
 }
-
 .custom-message > .ant-message-notice-content {
   border-radius: 10px;
   width: 300px;
   display: flex;
   align-items: center;
 }
-
 .custom-message-success > .ant-message-notice-content {
   border: 1px solid #c2e5cc;
   background-color: #ebf8ee;
@@ -56,9 +56,29 @@
   border: 1px solid red;
   background-color: #feede9;
 }
-
 .custom-message .ant-message-custom-content {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+/*Main Carousel*/
+.ant-carousel .slick-dots-bottom {
+  bottom: -30px !important;
+}
+
+.ant-carousel .slick-dots li {
+  width: 30px !important;
+}
+.ant-carousel .slick-dots li button {
+  height: 6px !important;
+  background-color: #fbbf24 !important;
+}
+.ant-carousel .slick-dots li.slick-active {
+  width: 50px !important;
+}
+
+/*Rating*/
+.ant-rate.ant-custom-rating {
+  font-size: 13px;
 }

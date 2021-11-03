@@ -52,15 +52,25 @@ router.post(
 );
 
 // @desc    Get all of orders
-// @route   GET /api/orders/me
+// @route   GET /api/orders/me?isDelivered=true
 // @access   GET Private
 
 router.get(
   "/me",
   auth,
   asyncHandler(async (req, res) => {
+    const queryObj = {};
+
+    if (req.query.isDelivered === "y") {
+      queryObj.isDelivered = true;
+    }
+    if (req.query.isDelivered === "n") {
+      queryObj.isDelivered = false;
+    }
+
     try {
-      const orders = await Order.find({ user: req.user._id });
+      const orders = await Order.find({ user: req.user._id, ...queryObj });
+
       res.send(orders);
     } catch (error) {
       throw new Error("Failed to fetch data");
