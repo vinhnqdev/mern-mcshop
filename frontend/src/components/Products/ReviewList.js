@@ -1,16 +1,15 @@
-import { Rate } from "antd";
+import { Alert, Rate } from "antd";
 import React from "react";
 import Review from "./Review";
 
 const Reviews = ({ reviewList = [], averageRating, totalReview }) => {
-  console.log(reviewList);
   return (
     <div className="md:col-span-5">
       <h2 className="uppercase text-lg font-normal lg:font-medium lg:text-xl lg:mt-10">
         Review của khách hàng
       </h2>
 
-      {reviewList.length === 0 && <p className="text-xs">Chưa có đánh giá</p>}
+      {reviewList.length === 0 && <Alert message="Chưa có đánh giá nào" type="warning" showIcon />}
       {reviewList && reviewList.length !== 0 && (
         <div className="space-x-3 mb-7">
           <Rate defaultValue={averageRating} disabled allowHalf className="ant-custom-rating" />

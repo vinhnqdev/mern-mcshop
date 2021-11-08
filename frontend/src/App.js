@@ -1,5 +1,5 @@
 import "./App.less";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import AdminRoute from "./components/PrivateRoutes/AdminRoute";
 import PrivateRoute from "./components/PrivateRoutes/PrivateRoute";
@@ -18,14 +18,22 @@ import ShippingPage from "./pages/ShippingPage";
 import SuccessOrderPage from "./pages/SuccessOrderPage";
 import UserAdminPage from "./pages/UserAdminPage";
 import UserAdminUpdatePage from "./pages/UserAdminUpdatePage";
+import AllProductPage from "./pages/AllProductPage";
+import { Button, Result } from "antd";
 
 function App() {
+  const history = useHistory();
+
   return (
     <div className="font-mont bg-main-bg">
       <Layout>
         <Switch>
           <Route path="/" exact>
             <HomePage />
+          </Route>
+
+          <Route path="/products" exact>
+            <AllProductPage />
           </Route>
 
           <Route path="/products/:id">
@@ -62,7 +70,6 @@ function App() {
           <PrivateRoute path="/checkout/success" redirectPath="/login">
             <SuccessOrderPage />
           </PrivateRoute>
-
           <AdminRoute path="/admin/user-list" redirectPath="/login?redirect=admin/user-list">
             <UserAdminPage />
           </AdminRoute>
@@ -85,8 +92,18 @@ function App() {
           <AdminRoute path="/admin/products/:id" redirectPath="login">
             <AddEditProductPage />
           </AdminRoute>
-
-          <Route path="*">Not Found</Route>
+          <Route path="*">
+            <Result
+              status="404"
+              title="404"
+              subTitle="Xin lỗi, trang bạn vừa truy cập không tồn tại"
+              extra={
+                <Button onClick={() => history.push("/")} type="primary">
+                  Quay về trang chủ
+                </Button>
+              }
+            />
+          </Route>
         </Switch>
       </Layout>
     </div>

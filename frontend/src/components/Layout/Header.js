@@ -10,8 +10,13 @@ import {
 } from "@heroicons/react/solid";
 import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
-import { Drawer } from "antd";
+import { Button, Drawer } from "antd";
 import SearchTop from "./SearchTop";
+import MainNav from "./MainNav";
+import { Collapse } from "antd";
+
+const { Panel } = Collapse;
+
 const Header = () => {
   const history = useHistory();
   const firstRender = useRef(true);
@@ -64,11 +69,17 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed z-30 top-0 left-0 right-0 bg-black text-white flex items-center justify-between px-7 h-20 md:h-24">
+    <header className="fixed z-50 top-0 left-0 right-0 bg-black text-white flex items-center justify-between px-7 h-20 md:h-24">
       {/* Logo */}
-      <div className="text-xl sm:text-2xl md:text-3xl font-semibold cursor-pointer tracking-wider flex items-center space-x-2">
-        <ViewListIcon onClick={showDrawer} className="w-6 h-6 cursor-pointer md:hidden" />
-        <span onClick={() => history.push("/")}>MCSHOP</span>
+      <div className="flex items-center h-full">
+        <ViewListIcon onClick={showDrawer} className="w-6 h-6 mr-3 cursor-pointer md:hidden" />
+        <span
+          className="text-xl inline-block sm:text-2xl md:text-3xl font-semibold cursor-pointer tracking-wider mr-5"
+          onClick={() => history.push("/")}
+        >
+          MCSHOP
+        </span>
+        <MainNav />
       </div>
       {/* Login and Cart */}
       <div className="flex items-center space-x-3 self-stretch">
@@ -81,7 +92,7 @@ const Header = () => {
           </span>
         )}
         {!user && (
-          <div className="">
+          <div className="hidden md:block">
             <UserIcon
               className="h-11 p-2 bg-white rounded-full text-black cursor-pointer"
               onClick={() => history.push("/login")}
@@ -137,7 +148,32 @@ const Header = () => {
         </div>
       </div>
       <Drawer
-        title="Reviews"
+        title={
+          !user ? (
+            <Button
+              type="primary"
+              onClick={() => {
+                history.push("/login");
+                onCloseDrawer();
+              }}
+            >
+              Đăng nhập
+            </Button>
+          ) : (
+            <div>
+              <p>Xin chào {user.name}</p>
+              <Button
+                onClick={() => {
+                  history.push("/profile/edit");
+                  onCloseDrawer();
+                }}
+                type="primary"
+              >
+                Go to profile
+              </Button>
+            </div>
+          )
+        }
         placement="left"
         contentWrapperStyle={{
           fontFamily: "'Montserrat', sans-serif",
@@ -146,7 +182,71 @@ const Header = () => {
         onClose={onCloseDrawer}
         visible={visibleDrawer}
       >
-        Hello
+        <Collapse
+          accordion
+          ghost={true}
+          bordered={false}
+          style={{ backgroundColor: "#fff" }}
+          expandIconPosition="right"
+        >
+          <Panel header={<h3 className="m-0 uppercase font-semibold text-lg">Sản phẩm</h3>} key="1">
+            <ul className="">
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  Điện thoại
+                </a>
+              </li>
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  Máy tính
+                </a>
+              </li>
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  Headphone
+                </a>
+              </li>
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  Đồng hồ
+                </a>
+              </li>
+            </ul>
+          </Panel>
+
+          <Panel
+            header={<h3 className="m-0 uppercase font-semibold text-lg">Thương hiệu</h3>}
+            key="2"
+          >
+            <ul className="">
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  Apple
+                </a>
+              </li>
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  SENNHEISER
+                </a>
+              </li>
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  Sony
+                </a>
+              </li>
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  Samsung
+                </a>
+              </li>
+              <li>
+                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
+                  XIAOMI
+                </a>
+              </li>
+            </ul>
+          </Panel>
+        </Collapse>
       </Drawer>
 
       <SearchTop onClose={onCloseSearchTop} visible={visibleSearchTop} />

@@ -1,22 +1,18 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useRef } from "react";
 import SwiperCore, { Autoplay, Navigation } from "swiper";
 import "swiper/components/navigation/navigation.min.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/swiper.min.css";
-import { getProducts } from "../../app/productThunk";
 import Loading from "../UI/Loading";
 import Product from "./Product";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Autoplay]);
-const ListProduct = () => {
+const ListProduct = ({ products, loading, title, buyButton }) => {
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
-  const dispatch = useDispatch();
-  const { products, loading } = useSelector((state) => state.products);
 
   const breakpoints = {
     640: {
@@ -30,14 +26,9 @@ const ListProduct = () => {
     },
   };
 
-  useEffect(() => {
-    // dispatch async action to Thunk
-    dispatch(getProducts());
-  }, [dispatch]);
-
   return (
     <section>
-      <h2 className="text-2xl px-1 font-bold uppercase">BEST SALLER</h2>
+      <h2 className="text-2xl px-1 font-bold uppercase">{title}</h2>
       {loading && <Loading />}
       {!loading && products && (
         <Swiper
@@ -66,6 +57,7 @@ const ListProduct = () => {
                 price={price}
                 rating={rating}
                 _id={_id}
+                buyButton={buyButton}
               />
             </SwiperSlide>
           ))}

@@ -1,11 +1,12 @@
-import express from "express";
+import express, { raw } from "express";
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 import { admin, auth } from "../middleware/authMiddleware.js";
+import { ObjectId } from "mongodb";
 const router = express.Router();
 
 // @desc    Fetch all products
-// @route   GET /api/products
+// @route   GET /api/products?search="abc"
 // @access   GET Public
 router.get(
   "/",
@@ -19,11 +20,93 @@ router.get(
         }
       : {};
 
-    const products = await Product.find({ ...search })
-      .populate({ path: "category", select: "name" })
-      .populate({ path: "brand", select: "name" });
+    let priceRange = {};
 
-    res.send(products);
+    if (req.query.price_gte && req.query.price_lte) {
+      const { price_gte, price_lte } = req.query;
+      priceRange = {
+        price: {
+          $gte: price_gte,
+          $lte: price_lte,
+        },
+      };
+    }
+
+    let rating = {};
+
+    if (req.query.rating_gte && req.query.rating_lte) {
+      const { rating_gte, rating_lte } = req.query;
+      rating = {
+        rating: {
+          $gte: rating_gte,
+          $lt: rating_lte,
+        },
+      };
+    }
+
+    if (req.query.rating) {
+      rating = {
+        rating: req.query.rating,
+      };
+    }
+
+    const category = req.query.category
+      ? {
+          category: ObjectId(req.query.category),
+        }
+      : {};
+
+    const brand = req.query.brand
+      ? {
+          brand: ObjectId(req.query.brand),
+        }
+      : {};
+
+    // Sorting
+    const sort = req.query.sort
+      ? {
+          [req.query.sort]: req.query.order || "asc",
+        }
+      : {};
+
+    // Paginating
+    const limit = Number(req.query.limit) || 10;
+    const page = Number(req.query.page) || 1;
+
+    const count = await Product.countDocuments({
+      ...search,
+      ...priceRange,
+      ...rating,
+      ...category,
+      ...brand,
+    });
+    const products = await Product.find({
+      ...search,
+      ...priceRange,
+      ...rating,
+      ...category,
+      ...brand,
+    })
+      .sort({ ...sort })
+      .limit(limit)
+      .skip(limit * (page - 1))
+      .populate({
+        path: "category",
+        select: "name",
+      })
+      .populate({
+        path: "brand",
+        select: "name",
+      });
+
+    res.send({
+      products,
+      pagination: {
+        page,
+        limit,
+        total: count,
+      },
+    });
   })
 );
 

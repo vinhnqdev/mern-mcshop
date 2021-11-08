@@ -1,3 +1,4 @@
+import { Button, Tag } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useRouteMatch } from "react-router";
@@ -42,15 +43,10 @@ function UserAddressList({
     <>
       <ul className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-5">
         {userAddresses.map(({ _id, name, phone, userAddress, isDefault }) => (
-          <li
-            key={_id}
-            className={`border px-3 rounded-md py-2 ${
-              isDefault ? "border-green-900 border-dashed" : "border-gray-800 border-solid"
-            }`}
-          >
+          <li key={_id} className={`border p-4 bg-white shadow-sm rounded-md`}>
             <div className="flex items-center justify-between">
               <h5 className="font-semibold">{name}</h5>
-              {isDefault && <span className="text-green-500 text-xs font-medium">Mặc định</span>}
+              {isDefault && <Tag color="#2db7f5">Mặc định</Tag>}
             </div>
             <p className="text-sm">{userAddress}</p>
             <p className="text-sm">Điện thoại: {phone}</p>
@@ -67,23 +63,20 @@ function UserAddressList({
                 </button>
               )}
 
-              <button
+              <Button
+                type="ghost"
                 onClick={
                   redirectAction
                     ? () => history.push(`${routeMatch.path}/${_id}`)
                     : () => onEdit(_id)
                 }
-                className={`text-sm py-1 rounded-sm px-3 border border-gray-500`}
               >
                 Sửa
-              </button>
+              </Button>
               {!isDefault && (
-                <button
-                  onClick={() => onRemove(_id)}
-                  className={`text-sm py-1 rounded-sm px-3 border border-gray-500`}
-                >
+                <Button danger onClick={() => onRemove(_id)}>
                   Xoá
-                </button>
+                </Button>
               )}
             </div>
           </li>

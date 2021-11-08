@@ -10,6 +10,9 @@ import CustomRating from "./Rating";
 import { Button, Drawer } from "antd";
 import ReviewList from "./ReviewList";
 import Review from "./Review";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { getProducts } from "../../app/productThunk";
+import ListProduct from "./ListProduct";
 
 const ProductDetail = () => {
   const [image, setImage] = useState(0);
@@ -24,6 +27,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading, product } = useSelector((state) => state.productDetails);
+  const { products, loading: productsLoading } = useSelector((state) => state.products);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,10 +44,24 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      dispatch(getProductDetail(id));
+      const actionResult = await dispatch(getProductDetail(id));
+      const product = await unwrapResult(actionResult);
+      dispatch(
+        getProducts({
+          category: product.category._id,
+        })
+      );
     };
     fetchProduct();
   }, [dispatch, id]);
+
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [id]);
 
   const showDrawer = () => {
     setVisibleDrawer(true);
@@ -161,6 +179,7 @@ const ProductDetail = () => {
             </ul>
           </div>
         </div>
+
         {/* Review */}
 
         <ReviewList
@@ -193,6 +212,12 @@ const ProductDetail = () => {
             ))}
           </ul>
         </Drawer>
+
+        {/* Product Suggestion */}
+
+        <div className="md:col-span-5">
+          <ListProduct title="Sản phẩm cùng loại" products={products} loading={productsLoading} />
+        </div>
       </div>
     );
   }

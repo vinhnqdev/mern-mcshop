@@ -6,6 +6,8 @@ import Modal from "../UI/Modal";
 import { Form } from "antd";
 import TextArea from "rc-textarea";
 import productApi from "../../api/productApi";
+import { useHistory } from "react-router-dom";
+
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 const MyReviews = () => {
   const dispatch = useDispatch();
@@ -21,12 +23,10 @@ const MyReviews = () => {
 
   const orders = useSelector((state) => state.order.orders);
 
+  const history = useHistory();
+
   useEffect(() => {
-    dispatch(
-      getMyOrders({
-        isDelivered: "y",
-      })
-    );
+    dispatch(getMyOrders());
   }, [dispatch]);
 
   const handalOpenModal = (productId, index) => {
@@ -79,7 +79,16 @@ const MyReviews = () => {
 
   return (
     <>
-      <h3 className="font-normal">Nhận xét sản phẩm đã mua</h3>
+      <h3 className="font-normal text-lg py-5">Nhận xét sản phẩm đã mua</h3>
+      {orders && orders.length === 0 && (
+        <div className="bg-white p-4 flex flex-col items-center justify-center">
+          <img src="/images/review-empty.jpeg" alt="" />
+          <p>Bạn chưa nhận sản phẩm nào</p>
+          <Button type="primary" onClick={() => history.push("/")}>
+            Tiếp tục mua sắm
+          </Button>
+        </div>
+      )}
       <ul className="grid gap-y-5 gap-x-7 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {orders?.map((order, index) => (
           <li key={order._id} className="bg-white flex flex-col shadow p-6 space-y-5">

@@ -43,8 +43,10 @@ function LoginForm({ initialValues, onSubmit }) {
             Đăng nhập
           </Button>
         </div>
-        <div className="text-right underline pr-2">
-          <Link to="/forgot-password">Quên mật khẩu</Link>
+        <div className="text-right underline pr-2 ">
+          <Link to="/forgot-password" className="text-black">
+            Quên mật khẩu
+          </Link>
         </div>
       </form>
     </div>

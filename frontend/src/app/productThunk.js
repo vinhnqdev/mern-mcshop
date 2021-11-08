@@ -3,8 +3,8 @@ import productApi from "../api/productApi";
 
 export const getProducts = createAsyncThunk("products/getProducts", async (params, thunkAPI) => {
   try {
-    const response = await productApi.get();
-    return response.data.reverse();
+    const response = await productApi.get(params);
+    return response.data;
   } catch (error) {
     throw new Error((error.response && error.response.data.message) || error.message);
   }

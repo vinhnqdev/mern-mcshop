@@ -34,6 +34,7 @@ export const getMyOrders = createAsyncThunk("order/getMyOrders", async (params, 
         });
       });
     });
+
     return orders.reverse();
   } catch (error) {
     throw new Error((error.response && error.response.data.message) || error.message);

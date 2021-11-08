@@ -27,7 +27,7 @@ function SearchTop({ onClose, visible }) {
         .get({ search })
         .then((res) => {
           setSearchLoading(false);
-          setProductList(res.data);
+          setProductList(res.data.products);
         })
         .catch((err) => {
           setSearchLoading(false);

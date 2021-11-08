@@ -62,11 +62,13 @@ function AddressNotes() {
       <Button
         style={{
           color: "#000",
-          fontSize: 14,
+          fontSize: 13,
+          fontWeight: 400,
           display: "flex",
           gap: "6px",
           alignItems: "center",
           justifyContent: "center",
+          borderRadius: "5px",
         }}
         type="primary"
         size="large"
