@@ -9,15 +9,19 @@ import {
   ViewListIcon,
 } from "@heroicons/react/solid";
 import { useHistory } from "react-router";
-import { useSelector } from "react-redux";
-import { Button, Drawer } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Drawer, Dropdown } from "antd";
 import SearchTop from "./SearchTop";
 import MainNav from "./MainNav";
-import { Collapse } from "antd";
+import { Collapse, Menu } from "antd";
+import { Link } from "react-router-dom";
+import { userActions } from "../../app/userSlice";
+import Tabs from "../Profile/Tabs";
 
 const { Panel } = Collapse;
 
 const Header = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const firstRender = useRef(true);
   let timerIdRef = useRef();
@@ -68,6 +72,75 @@ const Header = () => {
     setVisibleSearchTop(true);
   };
 
+  const menu = (
+    <Menu>
+      <Menu.Item key={1}>
+        <Link style={{ padding: "5px 10px" }} to="/login">
+          Đăng nhập
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={2}>
+        <Link style={{ padding: "5px 10px" }} to="/register">
+          Đăng kí
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
+
+  const profileMenu = (
+    <Menu>
+      {user?.isAdmin && (
+        <>
+          <Menu.Item key={1}>
+            <Link style={{ padding: "5px 10px" }} to="/admin/product-list">
+              Quản lý sản phẩm
+            </Link>
+          </Menu.Item>
+          <Menu.Item key={2}>
+            <Link style={{ padding: "5px 10px" }} to="/admin/order-list">
+              Quản lý đơn hàng
+            </Link>
+          </Menu.Item>
+          <Menu.Item key={3}>
+            <Link style={{ padding: "5px 10px" }} to="/admin/user-list">
+              Quản lý người dùng
+            </Link>
+          </Menu.Item>
+        </>
+      )}
+      {user?.isAdmin && <Menu.Divider />}
+      <Menu.Item key={4}>
+        <Link style={{ padding: "5px 10px" }} to="/profile/orders">
+          Đơn hàng
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={5}>
+        <Link style={{ padding: "5px 10px" }} to="/profile/edit">
+          Thông tin tài khoản
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={6}>
+        <Link style={{ padding: "5px 10px" }} to="/profile/address">
+          Sổ địa chỉ
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={7}>
+        <Link style={{ padding: "5px 10px" }} to="/profile/reviews">
+          Nhận xét hàng đã mua
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={8}>
+        <Link
+          onClick={() => dispatch(userActions.logout())}
+          style={{ padding: "5px 10px" }}
+          to="/profile/logout"
+        >
+          Đăng xuất
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <header className="fixed z-50 top-0 left-0 right-0 bg-black text-white flex items-center justify-between px-7 h-20 md:h-24">
       {/* Logo */}
@@ -84,32 +157,31 @@ const Header = () => {
       {/* Login and Cart */}
       <div className="flex items-center space-x-3 self-stretch">
         {user && (
-          <span
-            className="cursor-pointer hover:underline hidden md:inline-block"
-            onClick={() => history.push("/profile/edit")}
-          >
-            Hello {user.name}
-          </span>
-        )}
-        {!user && (
-          <div className="hidden md:block">
-            <UserIcon
-              className="h-11 p-2 bg-white rounded-full text-black cursor-pointer"
-              onClick={() => history.push("/login")}
-            />
-          </div>
+          <Dropdown overlay={profileMenu} placement="bottomCenter" arrow>
+            <div className="hidden md:flex items-center space-x-1 cursor-pointer">
+              <img className="w-11 p-1 rounded-full" src="/images/avatar.png" alt="Avatar" />
+              <span className="text-xs">{user.name}</span>
+            </div>
+          </Dropdown>
         )}
 
+        {!user && (
+          <Dropdown overlay={menu} placement="bottomRight" arrow>
+            <div className="hidden md:block">
+              <UserIcon className="h-11 p-2 bg-white rounded-full text-black cursor-pointer" />
+            </div>
+          </Dropdown>
+        )}
         <div>
           <SearchIcon
             onClick={showSearchTop}
-            className="bg-white rounded-full text-black cursor-pointer p-2 h-11"
+            className="bg-white rounded-full text-black cursor-pointer p-2 h-10"
           />
         </div>
 
         <div className="relative flex items-center p-1 h-full">
           <ShoppingCartIcon
-            className={`h-11 rounded-full bg-white text-black cursor-pointer p-2 transition transform ${
+            className={`h-10 rounded-full bg-white text-black cursor-pointer p-2 transition transform ${
               isShownCartNotification && "animate-scaleUp"
             }`}
             onClick={() => history.push("/cart")}
@@ -162,15 +234,8 @@ const Header = () => {
           ) : (
             <div>
               <p>Xin chào {user.name}</p>
-              <Button
-                onClick={() => {
-                  history.push("/profile/edit");
-                  onCloseDrawer();
-                }}
-                type="primary"
-              >
-                Go to profile
-              </Button>
+
+              <Tabs onChange={onCloseDrawer} isAdmin={user?.isAdmin} mbScreen />
             </div>
           )
         }

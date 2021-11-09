@@ -1,6 +1,7 @@
-import { Button, message, Modal, Space, Table } from "antd";
+import { Button, message, Space, Table, Typography, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deleteProduct, getProducts } from "../app/productThunk";
 import { formatCurrency } from "../helpers";
 import { useHistory } from "react-router-dom";
@@ -8,17 +9,34 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import Modal from "../components/UI/Modal";
 function ProductAdminPage() {
-  const products = useSelector((state) => state.products.products);
+  const [products, setProducts] = useState([]);
+  const [filter, setFilter] = useState({
+    page: 1,
+    limit: 10,
+  });
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [visibleModal, setVisibleModal] = useState(false);
+
   const dispatch = useDispatch();
   const history = useHistory();
-  const [visibleModal, setVisibleModal] = useState(false);
   const [productId, setProductId] = useState();
-  const [loading, setLoading] = useState(false);
+  const [removeProdLoading, setRemoveProdLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    const fetchProducts = async () => {
+      const actionResult = await dispatch(getProducts(filter));
+      const {
+        pagination: { total },
+        products,
+      } = await unwrapResult(actionResult);
+      setProducts(products);
+      setTotalProducts(total);
+    };
+
+    fetchProducts();
+  }, [dispatch, filter]);
 
   const columns = [
     {
@@ -80,26 +98,28 @@ function ProductAdminPage() {
     setVisibleModal(true);
   };
 
-  const handleCancel = () => {
-    setVisibleModal(false);
-  };
-
   const handleDeleteProduct = async () => {
     // Call API here
     try {
-      setLoading(true);
+      setRemoveProdLoading(true);
       const actionResult = await dispatch(deleteProduct(productId));
       await unwrapResult(actionResult);
-      setLoading(false);
-      setVisibleModal(false);
+
       message.success({
         content: "Xoá thành công",
         icon: <CheckCircleIcon className="w-10 h-10 text-green-500" />,
         className: "custom-message custom-message-success",
       });
-      dispatch(getProducts());
+      setVisibleModal(false);
+      setRemoveProdLoading(false);
+      setFilter({
+        ...filter,
+        page: 1,
+      });
     } catch (error) {
-      setLoading(false);
+      setRemoveProdLoading(false);
+      setVisibleModal(false);
+
       message.error({
         content: error.message,
         icon: <XCircleIcon className="w-10 h-10 text-red-600" />,
@@ -108,10 +128,21 @@ function ProductAdminPage() {
     }
   };
 
+  const handlePaginationChange = (page) => {
+    setFilter({
+      ...filter,
+      page,
+    });
+  };
+
+  const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
   return (
-    <div>
+    <section>
       <div className="flex items-center justify-between">
-        <h3 className="text-xl uppercase font-semibold">Products</h3>
+        <Typography.Title level={3} style={{ textTransform: "uppercase" }}>
+          Products
+        </Typography.Title>
         <div>
           <Button
             onClick={() => history.push("/admin/products/add")}
@@ -122,21 +153,41 @@ function ProductAdminPage() {
           </Button>
         </div>
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          defaultCurrent: 1,
+          current: filter.page,
+          pageSize: filter.limit,
+          total: totalProducts,
+          onChange: handlePaginationChange,
+        }}
+      />
 
       <Modal
-        style={{ fontFamily: "'Montserrat', sans-serif" }}
-        title="Xoá user này?"
         visible={visibleModal}
-        onCancel={handleCancel}
-        confirmLoading={loading}
-        onOk={handleDeleteProduct}
+        unableBgOverlay={removeProdLoading}
+        onClose={() => setVisibleModal(false)}
+        notAllowedClose={removeProdLoading}
       >
-        <p className="font-mont">
-          Sản phẩm sẽ không thể khôi phục sau khi xoá, bạn có chắc chắn muốn xoá không?
-        </p>
+        {!removeProdLoading ? (
+          <>
+            <p className="">Bạn muốn xoá sản phẩm này?</p>
+            <div className="flex justify-end gap-4">
+              <Button type="ghost" onClick={() => setVisibleModal(false)}>
+                Không
+              </Button>
+              <Button type="primary" danger onClick={handleDeleteProduct}>
+                Xoá
+              </Button>
+            </div>
+          </>
+        ) : (
+          <Spin indicator={loadingIcon} style={{ display: "flex", justifyContent: "center" }} />
+        )}
       </Modal>
-    </div>
+    </section>
   );
 }
 

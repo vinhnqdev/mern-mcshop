@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderById } from "../app/orderThunk";
 import { formatShippingDate } from "../helpers/date";
 import Loading from "../components/UI/Loading";
+import { Typography } from "antd";
 function SuccessOrderPage() {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -39,10 +40,14 @@ function SuccessOrderPage() {
 
           {/* Content */}
           <div className="flex flex-col space-y-3">
-            <p className="text-sm">Mã đơn hàng của bạn là:</p>
-            <span className="inline-block bg-yellow-400 py-2 px-4 font-semibold self-start">
+            <p className="text-sm mb-0"></p>
+            <Typography.Paragraph
+              copyable
+              className="font-semibold py-2 px-4 rounded-md border border-gray-600 self-start"
+            >
               {order._id}
-            </span>
+              {/* <span className="py-2 px-4 rounded-md bg-yellow-400">{}</span> */}
+            </Typography.Paragraph>
             <p className="text-sm">
               Bạn có thể xem lại{" "}
               <Link className="text-blue-500 cursor-pointer" to={`/profile/view/${order._id}`}>

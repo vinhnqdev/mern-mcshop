@@ -1,13 +1,19 @@
+import { Col, Row } from "antd";
 import React from "react";
 
 import Profile from "../components/Profile/Profile";
 import Tabs from "../components/Profile/Tabs";
 function ProfilePage() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5">
-      <Tabs />
-      <Profile />
-    </div>
+    <Row gutter={[32, { md: 16 }]}>
+      <Col span={0} md={{ span: 7 }} lg={{ span: 6 }}>
+        <Tabs />
+      </Col>
+
+      <Col span={24} md={{ span: 17 }} lg={{ span: 18 }}>
+        <Profile />
+      </Col>
+    </Row>
   );
 }
 

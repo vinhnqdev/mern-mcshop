@@ -56,7 +56,7 @@ function AddEditProductForm({ initialValues, onSubmit, productId }) {
   const [images, setImages] = useState(initialValues.images);
   const [imagesError, setImagesError] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [price, setPrice] = useState(formatCurrencyInput(""));
+  const [price, setPrice] = useState(formatCurrencyInput(initialValues.price));
   const [priceError, setPriceError] = useState("");
 
   const brandOption = useSelector(selectBrandOptions);

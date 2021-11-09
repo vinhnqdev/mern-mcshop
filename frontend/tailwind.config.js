@@ -20,6 +20,19 @@ module.exports = {
       animation: {
         slideDown: "slide-down 0.4s ease-in-out forwards",
       },
+      truncate: {
+        lines: {
+          2: "2",
+          5: "5",
+          8: "8",
+        },
+      },
+      aspectRatio: {
+        1: "1",
+        2: "2",
+        3: "3",
+        4: "4",
+      },
     },
   },
   variants: {
@@ -29,5 +42,9 @@ module.exports = {
     },
   },
 
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [
+    require("tailwind-scrollbar-hide"),
+    require("tailwindcss-truncate-multiline")(),
+    require("@tailwindcss/aspect-ratio"),
+  ],
 };

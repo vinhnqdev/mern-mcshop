@@ -107,8 +107,9 @@ const MyReviews = () => {
           </li>
         ))}
       </ul>
+
       {isModalVisible && (
-        <Modal onClose={() => setIsModalVisible(false)}>
+        <Modal visible={isModalVisible} onClose={() => setIsModalVisible(false)}>
           <div className="flex gap-3 items-center">
             <div className="w-10 h-10">
               <img src={orders[clickedProductIndex].image} alt="" className="w-full h-full" />

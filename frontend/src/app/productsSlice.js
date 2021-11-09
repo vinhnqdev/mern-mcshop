@@ -4,7 +4,7 @@ import { getProducts } from "./productThunk";
 
 const initialFilter = {
   page: 1,
-  limit: 4,
+  limit: 5,
 };
 
 const productSlice = createSlice({

@@ -23,7 +23,10 @@ const Product = ({ _id, images, name, price, discount, rating, buyButton }) => {
 
   return (
     <li>
-      <Link to={`/products/${_id}`} className="flex flex-col space-y-3 p-3 hover:shadow-lg group">
+      <Link
+        to={`/products/${_id}`}
+        className="flex flex-col justify-items-stretch space-y-3 p-3 hover:shadow-lg group"
+      >
         {/* Img */}
         <div className="relative">
           <img src={images[0]} alt="" />
@@ -32,7 +35,6 @@ const Product = ({ _id, images, name, price, discount, rating, buyButton }) => {
               -{discount}%
             </span>
           )}
-
           <div className="absolute right-0 top-0 text-xs text-white bg-black px-2 py-1 opacity-0 transition duration-700 hover:underline group-hover:opacity-100">
             Quickview
           </div>
@@ -40,10 +42,12 @@ const Product = ({ _id, images, name, price, discount, rating, buyButton }) => {
 
         {/* Title */}
         <div>
-          <p className="text-sm truncate text-gray-800">{name}</p>
+          <p className="text-sm truncate-2-lines text-gray-800">{name}</p>
         </div>
         {/* Rating */}
+
         <Rating rating={rating} />
+
         {/* Price */}
         <div>
           <p className="bg-black inline-block text-white font-semibold px-2 mb-1 rounded-sm">

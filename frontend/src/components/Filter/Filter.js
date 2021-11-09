@@ -1,7 +1,4 @@
 import React from "react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid";
-import { useHistory } from "react-router-dom";
-import queryString from "query-string";
 import CategoryFilter from "./CategoryFilter";
 import BrandFilter from "./BrandFilter";
 import PriceRangeFilter from "./PriceRangeFilter";
@@ -23,7 +20,6 @@ const Filter = () => {
 
   return (
     <div className="flex items-center justify-between">
-      {/** Filter */}
       <div>
         <ul className="flex items-center space-x-4">
           <CategoryFilter />
@@ -32,8 +28,6 @@ const Filter = () => {
           <RatingFilter />
         </ul>
       </div>
-
-      {/** Sort*/}
       <div>
         <ul>
           <SortBy />

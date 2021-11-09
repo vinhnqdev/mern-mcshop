@@ -31,10 +31,16 @@ const productApi = {
   },
   deleteProduct: (id) => {
     const url = `/api/products/${id}`;
-    return axios.delete(url, {
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(
+          axios.delete(url, {
+            headers: {
+              Authorization: `Bearer ${getToken()}`,
+            },
+          })
+        );
+      }, 1000);
     });
   },
   reviewProduct: (review, id) => {

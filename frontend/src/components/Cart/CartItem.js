@@ -82,10 +82,10 @@ function CartItem({ item }) {
         </h4>
         {/** Price */}
         <div className="flex items-center space-x-4 lg:flex-col lg:col-span-1 lg:space-x-0">
-          <p className="text-sm uppercase font-medium text-gray-600 line-through md:text-base  lg:order-1">
+          <p className="text-sm mb-2 uppercase font-medium text-gray-600 line-through md:text-base lg:order-1">
             {formatCurrency(originalPrice, "vi-VN", "VND")}
           </p>
-          <p className="text-sm font-semibold uppercase text-yellow-500 md:text-base">
+          <p className="text-sm mb-2 font-semibold uppercase text-yellow-500 md:text-base">
             {formatCurrency(item.price, "vi-VN", "VND")}
           </p>
         </div>
@@ -117,23 +117,21 @@ function CartItem({ item }) {
         </div>
       </div>
 
-      {isModalVisible && (
-        <Modal onClose={() => setIsModalVisible(false)}>
-          <p className="">Bạn muốn xoá sản phẩm này?</p>
-          <div className="flex justify-end gap-4">
-            <Button type="ghost" onClick={() => setIsModalVisible(false)}>
-              Không
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={typeRemove === "trash" ? clearItem : removeToCartHandler}
-            >
-              Xoá
-            </Button>
-          </div>
-        </Modal>
-      )}
+      <Modal visible={isModalVisible} onClose={() => setIsModalVisible(false)}>
+        <p className="">Bạn muốn xoá sản phẩm này?</p>
+        <div className="flex justify-end gap-4">
+          <Button type="ghost" onClick={() => setIsModalVisible(false)}>
+            Không
+          </Button>
+          <Button
+            type="primary"
+            danger
+            onClick={typeRemove === "trash" ? clearItem : removeToCartHandler}
+          >
+            Xoá
+          </Button>
+        </div>
+      </Modal>
     </li>
   );
 }

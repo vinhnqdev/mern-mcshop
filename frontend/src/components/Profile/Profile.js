@@ -46,32 +46,30 @@ const Profile = () => {
   };
 
   return (
-    <div className="md:col-span-3 md:px-6 lg:col-span-4">
-      <Switch>
-        <Route path={`${routerMatch.path}/orders`}>
-          <Orders />
+    <Switch>
+      <Route path={`${routerMatch.path}/orders`}>
+        <Orders />
+      </Route>
+      {details && Object.keys(details).length > 0 && (
+        <Route path={`${routerMatch.path}/edit`}>
+          <UpdateForm initialValues={initialUserValue} onSubmit={handleUpdateUserForm} />
         </Route>
-        {details && Object.keys(details).length > 0 && (
-          <Route path={`${routerMatch.path}/edit`}>
-            <UpdateForm initialValues={initialUserValue} onSubmit={handleUpdateUserForm} />
-          </Route>
-        )}
-        <Route path={`${routerMatch.path}/logout`}></Route>
+      )}
+      <Route path={`${routerMatch.path}/logout`}></Route>
 
-        <Route path={`${routerMatch.path}/reviews`}>
-          <MyReviews />
-        </Route>
-        <Route path={`${routerMatch.path}/view/:id`}>
-          <OrderDetail />
-        </Route>
-        <Route path={`${routerMatch.path}/address`} exact>
-          <AddressNotes />
-        </Route>
-        <Route path={`${routerMatch.path}/address/:id`}>
-          <AddEditAddress />
-        </Route>
-      </Switch>
-    </div>
+      <Route path={`${routerMatch.path}/reviews`}>
+        <MyReviews />
+      </Route>
+      <Route path={`${routerMatch.path}/view/:id`}>
+        <OrderDetail />
+      </Route>
+      <Route path={`${routerMatch.path}/address`} exact>
+        <AddressNotes />
+      </Route>
+      <Route path={`${routerMatch.path}/address/:id`}>
+        <AddEditAddress />
+      </Route>
+    </Switch>
   );
 };
 
