@@ -130,7 +130,12 @@ function ShippingForm({ initialValues, onSubmit }) {
         />
 
         <div className="flex items-center justify-center">
-          <Button type="submit">Tiếp tục</Button>
+          <Button
+            className="mc_button mc_button--secondary mc_button--pos-tl mc_button--round-sm px-6 py-2"
+            type="submit"
+          >
+            Tiếp tục
+          </Button>
         </div>
       </form>
     </div>

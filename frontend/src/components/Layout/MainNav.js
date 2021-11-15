@@ -1,16 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategoryList } from "../../app/categoryThunk";
 import { Link } from "react-router-dom";
 import { getBrandList } from "../../app/brandThunk";
-import { useHistory } from "react-router-dom";
+import { getCategoryList } from "../../app/categoryThunk";
 import { productsActions } from "../../app/productsSlice";
 
 const MainNav = () => {
   const dispatch = useDispatch();
   const categoryList = useSelector((state) => state.category.categoryList);
   const brandList = useSelector((state) => state.brand.brandList);
-  const history = useHistory();
 
   useEffect(() => {
     dispatch(getCategoryList());
@@ -28,14 +26,10 @@ const MainNav = () => {
             <li key={category._id}>
               <Link
                 to={`/products?category=${category._id}`}
-                onClick={() =>
-                  dispatch(
-                    productsActions.setCategoryFilter({
-                      category: category._id,
-                    })
-                  )
-                }
                 className="uppercase text-md font-semibold block py-3 px-5 text-black"
+                onClick={() =>
+                  dispatch(productsActions.setCategoryFilter({ category: category._id }))
+                }
               >
                 {category.name}
               </Link>
@@ -47,20 +41,13 @@ const MainNav = () => {
       <li className="uppercase h-full flex items-center font-normal p-1 m-3 cursor-pointer relative group">
         Thương hiệu
         <div className="absolute top-16 left-0 w-full scale-x-0 transition origin-left transform h-0.5 bg-white group-hover:scale-x-100"></div>
-        {/** Subnav */}
         <ul className="absolute -left-1 transform transition origin-top scale-y-0 group-hover:scale-y-100 top-full bg-white w-60 shadow-md py-3">
           {brandList.map((brand) => (
             <li key={brand._id}>
               <Link
                 to={`/products?brand=${brand._id}`}
                 className="uppercase text-md font-semibold block py-3 px-5 text-black"
-                onClick={() =>
-                  dispatch(
-                    productsActions.setBrandFilter({
-                      brand: brand._id,
-                    })
-                  )
-                }
+                onClick={() => dispatch(productsActions.setBrandFilter({ brand: brand._id }))}
               >
                 {brand.name}
               </Link>

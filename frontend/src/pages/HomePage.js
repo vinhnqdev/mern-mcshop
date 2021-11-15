@@ -1,17 +1,17 @@
 import { unwrapResult } from "@reduxjs/toolkit";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { getProducts } from "../app/productThunk";
 import ListProduct from "../components/Products/ListProduct";
 import Carousel from "../components/UI/Slider";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  // const { products, loading } = useSelector((state) => state.products);
   const [bestSellerProduct, setBestSellerProdut] = useState([]);
   const [bestSellerLoading, setBestSellerLoading] = useState(false);
   const [arrivalProduct, setArrivalProduct] = useState([]);
   const [arrivalLoading, setArrivalLoading] = useState(false);
+
   useEffect(() => {
     const fetchBestSellerProduct = async () => {
       setBestSellerLoading(true);

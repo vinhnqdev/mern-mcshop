@@ -6,7 +6,10 @@ import UserAddressList from "../Checkout/UserAddressList";
 import Modal from "../UI/Modal";
 import { Button, message } from "antd";
 import addressApi from "../../api/addressApi";
-import { CheckCircleIcon, PlusIcon, XCircleIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import { PlusCircleOutlined } from "@ant-design/icons";
+
+import MCButton from "../UI/Button";
 function AddressNotes() {
   const userAddresses = useSelector((state) => state.user.userAddresses);
   const dispatch = useDispatch();
@@ -59,24 +62,17 @@ function AddressNotes() {
           </div>
         </Modal>
       )}
-      <Button
-        style={{
-          color: "#000",
-          fontSize: 13,
-          fontWeight: 400,
-          display: "flex",
-          gap: "6px",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: "5px",
-        }}
-        type="primary"
-        size="large"
-        onClick={() => history.push(`${routeMatch.path}/add`)}
-      >
-        <PlusIcon className="w-5" />
-        Thêm địa chỉ giao hàng mới
-      </Button>
+
+      {!loading && (
+        <MCButton
+          onClick={() => history.push(`${routeMatch.path}/add`)}
+          className="mc_button mc_button--primary mc_button--pos-tl mc_button--round-sm px-4 py-2 text-sm flex items-center"
+        >
+          <PlusCircleOutlined style={{ marginRight: "5px", fontSize: 16 }} />
+          Thêm địa chỉ giao hàng mới
+        </MCButton>
+      )}
+
       <UserAddressList
         onRemove={handelModalOpen}
         loading={loading}

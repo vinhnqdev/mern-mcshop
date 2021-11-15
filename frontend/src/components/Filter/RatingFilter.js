@@ -14,8 +14,8 @@ const ratingList = [
 
 const RatingFilter = () => {
   const history = useHistory();
-  const { filter, onFilter } = useContext(FilterContext);
-  const { rating_gte, rating_lte, rating } = filter;
+  const { queryObj, onFilter } = useContext(FilterContext);
+  const { rating_gte, rating_lte, rating } = queryObj;
   let ratingCheckbox = rating ? `${rating}to${rating}` : `${rating_gte}to${rating_lte}`;
 
   const handleRatingChange = (_id) => {
@@ -33,11 +33,11 @@ const RatingFilter = () => {
       changedFilter =
         ratingCheckbox === _id
           ? {
-              ...filter,
+              ...queryObj,
               ...resetFilterRating,
             }
           : {
-              ...filter,
+              ...queryObj,
               ...resetFilterRating,
               rating: rating_gte,
             };
@@ -45,11 +45,11 @@ const RatingFilter = () => {
       changedFilter =
         ratingCheckbox === _id
           ? {
-              ...filter,
+              ...queryObj,
               ...resetFilterRating,
             }
           : {
-              ...filter,
+              ...queryObj,
               rating: undefined,
               rating_gte,
               rating_lte,
@@ -64,33 +64,36 @@ const RatingFilter = () => {
     onFilter(changedFilter);
   };
   return (
-    <li className="relative z-30 uppercase text-sm py-3 flex items-center cursor-pointer group">
-      Đánh giá
-      <ChevronDownIcon className="h-4" />
-      <div className="absolute left-0 top-full border border-black bg-white w-56 px-3 py-4 space-y-3 transform transition scale-y-0 origin-top group-hover:scale-y-100">
-        {ratingList.map((rating) => (
-          <div className="relative" key={rating._id}>
-            <div
-              className={`absolute left-0 top-0 w-5 h-5 rounded-sm border border-black transition duration-500 ${
-                ratingCheckbox === rating._id && "bg-black"
-              } `}
+    <>
+      {ratingList.map((rating) => (
+        <div className="relative" key={rating._id}>
+          {/** Custom Checkbox */}
+          <div
+            className={`w-7 h-7 md:w-5 md:h-5 absolute left-0 top-0 rounded-sm border border-black transition duration-500 ${
+              ratingCheckbox === rating._id && "bg-black"
+            } `}
+          >
+            {rating._id === ratingCheckbox && <CheckIcon className="text-white" />}
+          </div>
+
+          <input
+            id={`filter-rating-${rating._id}`}
+            type="checkbox"
+            checked={rating._id === ratingCheckbox}
+            onChange={() => handleRatingChange(rating._id)}
+            className="w-7 h-7 md:w-5 md:h-5 absolute left-0 z-10 opacity-0 cursor-pointer"
+          />
+          <div className="text-left">
+            <label
+              htmlFor={`filter-rating-${rating._id}`}
+              className="ml-10 md:ml-7 block py-1 text-sm md:text-xs cursor-pointer"
             >
-              {rating._id === ratingCheckbox && <CheckIcon className="text-white" />}
-            </div>
-            <input
-              id={`filter-rating-${rating._id}`}
-              type="checkbox"
-              checked={rating._id === ratingCheckbox}
-              onChange={() => handleRatingChange(rating._id)}
-              className="absolute z-10 w-5 h-5 opacity-0 cursor-pointer"
-            />
-            <label htmlFor={`filter-rating-${rating._id}`} className="ml-6 text-xs cursor-pointer">
               {rating.name}
             </label>
           </div>
-        ))}
-      </div>
-    </li>
+        </div>
+      ))}
+    </>
   );
 };
 

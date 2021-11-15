@@ -1,9 +1,10 @@
 import { Tag } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import queryString from "query-string";
 import { useHistory } from "react-router";
 import { useContext } from "react";
 import FilterContext from "../../contexts/filter-context";
+import { productsActions } from "../../app/productsSlice";
 const getCategoryName = (id, categoryList) => {
   const category = categoryList.find((category) => category._id === id);
   if (category) return category.name;
@@ -34,19 +35,21 @@ const convertTagList = (tagList, categoryList, brandList) => {
   }
 };
 
-const TagList = ({ tagList, onClearAllTag }) => {
+const TagList = ({ tagList }) => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const categoryList = useSelector((state) => state.category.categoryList);
   const brandList = useSelector((state) => state.brand.brandList);
   const newTagList = convertTagList(tagList, categoryList, brandList);
-  const { filter, onFilter } = useContext(FilterContext);
+  const { queryObj, onFilter, onResetPriceRange } = useContext(FilterContext);
 
   const handleCloseTag = (tag) => {
-    const newFilter = { ...filter };
+    const newFilter = { ...queryObj };
 
     if (tag.type === "price") {
       newFilter.price_gte = undefined;
       newFilter.price_lte = undefined;
+      onResetPriceRange();
     } else if (tag.type === "rating") {
       newFilter.rating_gte = undefined;
       newFilter.rating_lte = undefined;
@@ -68,13 +71,14 @@ const TagList = ({ tagList, onClearAllTag }) => {
       pathname: "/products",
       search: queryString.stringify({}),
     });
-    onClearAllTag();
+    onResetPriceRange();
+    dispatch(productsActions.resetFilter());
   };
 
   return (
-    <ul className="flex items-center">
+    <ul className="flex flex-wrap items-center">
       {newTagList?.map((tag, index) => (
-        <li key={index}>
+        <li key={index} className="mb-2">
           <Tag closable={tag.type !== "all"} visible={true} onClose={() => handleCloseTag(tag)}>
             {tag.title.toUpperCase()}
           </Tag>
@@ -82,7 +86,7 @@ const TagList = ({ tagList, onClearAllTag }) => {
       ))}
 
       {newTagList?.length !== 0 && (
-        <li className="ml-3">
+        <li className="ml-3 mb-2">
           <span
             onClick={handleClearAllTag}
             className="text-sm cursor-pointer underline hover:text-white hover:bg-black"

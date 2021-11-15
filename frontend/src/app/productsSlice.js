@@ -4,7 +4,7 @@ import { getProducts } from "./productThunk";
 
 const initialFilter = {
   page: 1,
-  limit: 5,
+  limit: 6,
 };
 
 const productSlice = createSlice({
@@ -22,14 +22,14 @@ const productSlice = createSlice({
     setFilter: (state, action) => {
       state.filter = { ...state.filter, ...action.payload };
     },
+    resetFilter: (state) => {
+      state.filter = initialFilter;
+    },
     setCategoryFilter: (state, action) => {
       state.filter = { ...initialFilter, ...action.payload };
     },
     setBrandFilter: (state, action) => {
       state.filter = { ...initialFilter, ...action.payload };
-    },
-    resetFilter: (state, action) => {
-      state.filter = initialFilter;
     },
   },
   extraReducers: {

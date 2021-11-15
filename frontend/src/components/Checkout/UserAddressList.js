@@ -43,10 +43,10 @@ function UserAddressList({
     <>
       <ul className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-5">
         {userAddresses.map(({ _id, name, phone, userAddress, isDefault }) => (
-          <li key={_id} className={`border p-4 bg-white shadow-sm rounded-md`}>
+          <li key={_id} className={`p-4 bg-white shadow-md rounded-md`}>
             <div className="flex items-center justify-between">
               <h5 className="font-semibold">{name}</h5>
-              {isDefault && <Tag color="#2db7f5">Mặc định</Tag>}
+              {isDefault && <Tag color="#000">Mặc định</Tag>}
             </div>
             <p className="text-sm">{userAddress}</p>
             <p className="text-sm">Điện thoại: {phone}</p>

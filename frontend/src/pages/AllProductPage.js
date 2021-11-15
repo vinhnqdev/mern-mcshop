@@ -1,31 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
-import { getProducts } from "../app/productThunk";
 import Filter from "../components/Filter/Filter";
 import queryString from "query-string";
 import { getCategoryList } from "../app/categoryThunk";
 import { getBrandList } from "../app/brandThunk";
-import { productsActions } from "../app/productsSlice";
 import FilterListProduct from "../components/Filter/FilterListProduct";
 import TagList from "../components/Filter/TagList";
 import { formatCurrency } from "../helpers";
-import { Pagination } from "antd";
-import { FilterProvider } from "../contexts/filter-context";
+import { AutoComplete, Collapse, Drawer, Pagination } from "antd";
+import FilterContext from "../contexts/filter-context";
+import { productsActions } from "../app/productsSlice";
+import { AdjustmentsIcon } from "@heroicons/react/solid";
+import CategoryFilter from "../components/Filter/CategoryFilter";
+import BrandFilter from "../components/Filter/BrandFilter";
+import PriceRangeFilter from "../components/Filter/PriceRangeFilter";
+import RatingFilter from "../components/Filter/RatingFilter";
+import SortBy from "../components/Filter/SortBy";
 
 const getTagList = (queryObj) => {
   const queryObjKeys = Object.keys(queryObj);
   const queryObjValues = Object.values(queryObj);
 
-  // Case create a tag "Tất cả sản phẩm"
-  if (queryObjKeys.length === 0) {
-    return [
-      {
-        type: "all",
-        title: " Tất cả sản phẩm",
-      },
-    ];
-  }
   const allowedKeyArray = [
     "brand",
     "category",
@@ -114,65 +110,192 @@ const removeObjectKeys = (obj, ...keys) => {
   return newObj;
 };
 
+const getTitleList = (obj, categories, brands, products, firstRender) => {
+  if (products.length === 0 && !firstRender) {
+    return [{ id: "notFound", title: "Not Found" }];
+  }
+  const objKeys = Object.keys(obj);
+
+  const newObjKeys = objKeys.filter((objKey) => objKey === "brand" || objKey === "category");
+  if (newObjKeys.length === 0) {
+    return [{ id: "all", title: "Tất cả sản phẩm" }];
+  }
+  const objValues = newObjKeys.map((key) => obj[key]);
+
+  return newObjKeys.map((key, index) => ({
+    id: objValues[index],
+    title:
+      key === "category"
+        ? categories.find((category) => category._id === objValues[index])?.name
+        : brands.find((brand) => brand._id === objValues[index])?.name,
+  }));
+};
+
 const AllProductPage = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.products);
-  const total = useSelector((state) => state.products.total);
+
   const filter = useSelector((state) => state.products.filter);
+  const { page, limit } = filter;
+  const {
+    products,
+    total,
+    firstRender,
+    searchSuggestions,
+    onSearch,
+    onSelect,
+    minPriceRange,
+    maxPriceRange,
+  } = useContext(FilterContext);
   const categoryList = useSelector((state) => state.category.categoryList);
   const brandList = useSelector((state) => state.brand.brandList);
 
+  const [visibleFilterDrawer, setVisibleFilterDrawer] = useState(false);
   const { search } = useLocation();
-  const queryObj = queryString.parse(search);
+
+  const order = ["category", "brand"];
+  const queryObj = queryString.parse(search, {
+    sort: (a, b) => order.indexOf(a) - order.indexOf(b),
+  });
+
   const newQueryObj = removeObjectKeys(queryObj, "sort", "order");
   const tagList = getTagList(newQueryObj);
+  const titleList = getTitleList(queryObj, categoryList, brandList, products, firstRender);
 
   useEffect(() => {
-    if (!categoryList || !brandList) {
-      dispatch(getCategoryList());
-      dispatch(getBrandList());
-    }
-  }, [dispatch, categoryList, brandList]);
-
-  // Fetch Product
-
-  useEffect(() => {
-    dispatch(getProducts({ ...filter, ...queryObj }));
-  }, [dispatch, filter]);
-
-  const clearFilter = () => {
-    dispatch(productsActions.resetFilter());
-  };
+    dispatch(getCategoryList());
+    dispatch(getBrandList());
+  }, [dispatch]);
 
   const handlePagination = (page) => {
     dispatch(productsActions.setFilter({ ...filter, page }));
+    window.scrollTo({
+      left: 0,
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
     <section>
-      <FilterProvider>
-        <Filter filter={queryObj} />
+      <div className="flex flex-wrap items-center justify-between mb-5">
+        <ul className="flex flex-wrap items-center justify-center mb-2">
+          {titleList.map((title, index) => (
+            <li className="flex items-center" key={title.id}>
+              <p className="uppercase bg-yellow-300 text-xl font-medium md:text-3xl md:font-semibold m-0">
+                {title.title}
+              </p>
 
-        <TagList
-          tagList={tagList}
-          filter={queryObj}
-          // onFilter={handleFilterProduct}
-          onClearAllTag={clearFilter}
+              {index !== titleList.length - 1 && <span className="w-2 h-2 mx-2 bg-black rounded" />}
+            </li>
+          ))}
+          <span className="ml-3 text-gray-600 self-end">{`[${total}]`}</span>
+        </ul>
+
+        <AdjustmentsIcon
+          className="w-8 h-8 self-start md:hidden"
+          onClick={() => setVisibleFilterDrawer(true)}
         />
-      </FilterProvider>
 
-      <FilterListProduct products={products} />
+        <div className="hidden md:block">
+          <AutoComplete
+            autoFocus
+            dropdownClassName="autocomplete-dropdown"
+            style={{ width: 250 }}
+            notFoundContent="Không tìm thấy kết quả"
+            onSelect={onSelect}
+            onSearch={onSearch}
+            placeholder=" Tìm kiếm sản phẩm"
+          >
+            {searchSuggestions.map((product) => (
+              <AutoComplete.Option key={product._id} value={product._id}>
+                <div className="space-x-3">
+                  <div className="w-10 h-10 inline-block">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={product.images[0]}
+                      alt={product.name}
+                    />
+                  </div>
+                  <div className="inline-block">
+                    <p className="mb-0">{product.name}</p>
+                    <p className="mb-0">{formatCurrency(product.price, "vi-VN", "VND")}</p>
+                  </div>
+                </div>
+              </AutoComplete.Option>
+            ))}
+          </AutoComplete>
+        </div>
+      </div>
+
+      <Filter />
+
+      <TagList tagList={tagList} />
+
+      <FilterListProduct />
 
       {products.length !== 0 && (
         <Pagination
           style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}
           defaultCurrent={1}
-          current={filter.page}
-          pageSize={filter.limit}
-          total={total}
+          current={page}
+          pageSize={limit}
+          total={[total]}
           onChange={handlePagination}
         />
       )}
+
+      <Drawer
+        title={<h2 className="uppercase text-2xl">Lọc theo</h2>}
+        placement="right"
+        headerStyle={{
+          padding: "16px 16px",
+        }}
+        bodyStyle={{
+          padding: 0,
+        }}
+        contentWrapperStyle={{
+          fontFamily: "'Montserrat', sans-serif",
+          width: "100%",
+        }}
+        onClose={() => setVisibleFilterDrawer(false)}
+        visible={visibleFilterDrawer}
+      >
+        <Collapse
+          style={{ backgroundColor: "#fff" }}
+          accordion
+          expandIconPosition="right"
+          bordered={false}
+        >
+          <Collapse.Panel header={<h2 className="uppercase font-semibold">Sản phẩm</h2>}>
+            <div className="space-y-2">
+              <CategoryFilter />
+            </div>
+          </Collapse.Panel>
+          <Collapse.Panel header={<h2 className="uppercase font-semibold">Thương hiệu</h2>}>
+            <div className="space-y-2">
+              <BrandFilter />
+            </div>
+          </Collapse.Panel>
+          {((minPriceRange && maxPriceRange) || minPriceRange !== maxPriceRange) && (
+            <Collapse.Panel header={<h2 className="uppercase font-semibold">Giá</h2>}>
+              <div className="max-w-sm mx-auto">
+                <PriceRangeFilter />
+              </div>
+            </Collapse.Panel>
+          )}
+
+          <Collapse.Panel header={<h2 className="uppercase font-semibold">Đánh giá</h2>}>
+            <div className="space-y-2">
+              <RatingFilter />
+            </div>
+          </Collapse.Panel>
+          <Collapse.Panel header={<h2 className="uppercase font-semibold">Sắp xếp theo</h2>}>
+            <div className="space-y-2">
+              <SortBy />
+            </div>
+          </Collapse.Panel>
+        </Collapse>
+      </Drawer>
     </section>
   );
 };

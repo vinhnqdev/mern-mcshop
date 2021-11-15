@@ -17,10 +17,11 @@ import { Collapse, Menu } from "antd";
 import { Link } from "react-router-dom";
 import { userActions } from "../../app/userSlice";
 import Tabs from "../Profile/Tabs";
+import { productsActions } from "../../app/productsSlice";
 
 const { Panel } = Collapse;
 
-const Header = () => {
+const Header = ({ hidden }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const firstRender = useRef(true);
@@ -29,7 +30,8 @@ const Header = () => {
   const { user } = useSelector((state) => state.user.current);
   const cart = useSelector((state) => state.cart.cart);
   const messageAction = useSelector((state) => state.cart.messageAction);
-
+  const categoryList = useSelector((state) => state.category.categoryList);
+  const brandList = useSelector((state) => state.brand.brandList);
   const [visibleDrawer, setVisibleDrawer] = useState(false);
   const [visibleSearchTop, setVisibleSearchTop] = useState(false);
 
@@ -142,7 +144,11 @@ const Header = () => {
   );
 
   return (
-    <header className="fixed z-50 top-0 left-0 right-0 bg-black text-white flex items-center justify-between px-7 h-20 md:h-24">
+    <header
+      className={`fixed z-1000 left-0 right-0 bg-black text-white flex items-center justify-between px-5 md:px-7 h-20 md:h-24 transition-all duration-700 ${
+        hidden ? "-top-24" : "top-0"
+      }`}
+    >
       {/* Logo */}
       <div className="flex items-center h-full">
         <ViewListIcon onClick={showDrawer} className="w-6 h-6 mr-3 cursor-pointer md:hidden" />
@@ -158,7 +164,7 @@ const Header = () => {
       <div className="flex items-center space-x-3 self-stretch">
         {user && (
           <Dropdown overlay={profileMenu} placement="bottomCenter" arrow>
-            <div className="hidden md:flex items-center space-x-1 cursor-pointer">
+            <div className="hidden self-stretch md:flex items-center space-x-1 cursor-pointer">
               <img className="w-11 p-1 rounded-full" src="/images/avatar.png" alt="Avatar" />
               <span className="text-xs">{user.name}</span>
             </div>
@@ -256,26 +262,24 @@ const Header = () => {
         >
           <Panel header={<h3 className="m-0 uppercase font-semibold text-lg">Sản phẩm</h3>} key="1">
             <ul className="">
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  Điện thoại
-                </a>
-              </li>
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  Máy tính
-                </a>
-              </li>
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  Headphone
-                </a>
-              </li>
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  Đồng hồ
-                </a>
-              </li>
+              {categoryList.map((category) => (
+                <li key={category._id}>
+                  <Link
+                    onClick={() => {
+                      dispatch(
+                        productsActions.setCategoryFilter({
+                          category: category._id,
+                        })
+                      );
+                      onCloseDrawer();
+                    }}
+                    to={`/products?category=${category._id}`}
+                    className="uppercase text-md font-semibold block py-3 px-5 text-black"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </Panel>
 
@@ -284,31 +288,24 @@ const Header = () => {
             key="2"
           >
             <ul className="">
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  Apple
-                </a>
-              </li>
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  SENNHEISER
-                </a>
-              </li>
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  Sony
-                </a>
-              </li>
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  Samsung
-                </a>
-              </li>
-              <li>
-                <a className="uppercase text-md font-semibold block py-3 px-5 text-black" href="">
-                  XIAOMI
-                </a>
-              </li>
+              {brandList.map((brand) => (
+                <li key={brand._id}>
+                  <Link
+                    onClick={() => {
+                      dispatch(
+                        productsActions.setBrandFilter({
+                          brand: brand._id,
+                        })
+                      );
+                      onCloseDrawer();
+                    }}
+                    to={`products?brand=${brand._id}`}
+                    className="uppercase text-md font-semibold block py-3 px-5 text-black"
+                  >
+                    {brand.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </Panel>
         </Collapse>

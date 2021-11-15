@@ -3,7 +3,9 @@ import { useSelector } from "react-redux";
 import { formatCurrency } from "../../helpers/";
 import CartItem from "./CartItem";
 import { useHistory } from "react-router-dom";
-import { Empty, Button } from "antd";
+import { Empty, message } from "antd";
+import MCButton from "../UI/Button";
+import { XCircleIcon } from "@heroicons/react/solid";
 function Cart() {
   const cart = useSelector((state) => state.cart.cart);
 
@@ -15,6 +17,18 @@ function Cart() {
   const itemQuantity = cart.reduce((acc, item) => {
     return acc + item.quantity;
   }, 0);
+
+  const handleCheckout = () => {
+    console.log("Clicked");
+    if (cart.length === 0) {
+      return message.error({
+        content: "Giỏ hàng rỗng",
+        icon: <XCircleIcon className="w-10 h-10 text-red-600" />,
+        className: "custom-message custom-message-error",
+      });
+    }
+    history.push("/checkout/shipping");
+  };
 
   return (
     <div className="lg:grid grid-cols-6 gap-7">
@@ -49,9 +63,12 @@ function Cart() {
             image="/images/empty-cart.png"
             imageStyle={{ height: 150 }}
           >
-            <Button type="primary" onClick={() => history.push("/")}>
+            <MCButton
+              className="mc_button mc_button--primary mc_button--pos-tl mc_button--round-sm px-4 py-2"
+              onClick={() => history.push("/")}
+            >
               Tiếp tục mua sắm
-            </Button>
+            </MCButton>
           </Empty>
         ) : (
           <div className="bg-white shadow-xl mt-5">
@@ -86,30 +103,20 @@ function Cart() {
 
         {/** Checkout */}
         <div className="bg-white shadow-xl mt-7 p-4 space-y-3">
-          <button
-            disabled={cart.length === 0}
-            onClick={() => history.push("/checkout/shipping")}
-            className={`relative group z-10 border  block w-full p-3 rounded-full ${
-              cart.length !== 0 && "hover:border-yellow-500 hover:text-black"
-            } ${
-              cart.length === 0 && "cursor-not-allowed"
-            } text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg`}
+          <MCButton
+            // disabled={cart.length === 0}
+            onClick={handleCheckout}
+            className="mc_button mc_button--primary mc_button--pos-tl mc_button--round-md mc_button--uppercase w-full py-4 font-semibold"
           >
-            <span
-              className={`absolute -z-10 top-0 left-0 w-full h-full origin-right ${
-                cart.length === 0
-                  ? "bg-opacity-70 cursor-not-allowed"
-                  : "bg-opacity-100 cursor-pointer"
-              } bg-yellow-500 transition transform ${cart.length !== 0 && "group-hover:scale-x-0"}`}
-            ></span>
             Mua ngay
-          </button>
-          <button
+          </MCButton>
+
+          <MCButton
             onClick={() => history.push("/")}
-            className=" block w-full p-3 rounded-full text-black border border-gray-300 font-normal lg:rounded-none lg:p-4 lg:text-lg"
+            className="mc_button_reverse mc_button--secondary mc_button--pos-tr mc_button--round-md mc_button--uppercase w-full py-4 font-semibold"
           >
             Quay về cửa hàng
-          </button>
+          </MCButton>
         </div>
       </div>
     </div>

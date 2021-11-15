@@ -1,23 +1,25 @@
-import { Button, message, Space, Table, Typography, Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { deleteProduct, getProducts } from "../app/productThunk";
-import { formatCurrency } from "../helpers";
-import { useHistory } from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { unwrapResult } from "@reduxjs/toolkit";
+import { LoadingOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { AutoComplete, Button, message, Space, Spin, Table, Typography } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import Highlighter from "react-highlight-words";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { deleteProduct, getProducts } from "../app/productThunk";
 import Modal from "../components/UI/Modal";
-function ProductAdminPage() {
+import { formatCurrency } from "../helpers";
+
+const ProductAdminPage = () => {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState({
     page: 1,
     limit: 10,
   });
+  const [searchTerm, setSearchTerm] = useState("");
   const [totalProducts, setTotalProducts] = useState(0);
   const [visibleModal, setVisibleModal] = useState(false);
+  const timerId = useRef();
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -48,6 +50,16 @@ function ProductAdminPage() {
       title: "Tên",
       dataIndex: "name",
       key: "name",
+      render: (name) => {
+        return (
+          <Highlighter
+            highlightClassName="hightlight-text"
+            searchWords={[searchTerm]}
+            autoEscape={true}
+            textToHighlight={name}
+          />
+        );
+      },
     },
     {
       title: "Thương hiệu",
@@ -135,6 +147,24 @@ function ProductAdminPage() {
     });
   };
 
+  // const handleSearchChange = (data) => {
+  //   setSearchTerm(data);
+  // };
+
+  const onSearch = async (searchText) => {
+    if (timerId.current) {
+      clearTimeout(timerId.current);
+    }
+
+    timerId.current = setTimeout(() => {
+      setFilter({ ...filter, page: 1, search: searchText });
+    }, 450);
+  };
+
+  const handleSearchChange = (searchTerm) => {
+    setSearchTerm(searchTerm);
+  };
+
   const loadingIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   return (
@@ -153,6 +183,31 @@ function ProductAdminPage() {
           </Button>
         </div>
       </div>
+
+      <div className="flex">
+        <AutoComplete
+          style={{
+            width: 200,
+            fontFamily: "'Montserrat', sans-serif",
+          }}
+          onSearch={onSearch}
+          onChange={handleSearchChange}
+          value={searchTerm}
+          placeholder="Search product"
+        />
+        <div className="w-10 bg-yellow-400 flex items-center justify-center cursor-pointer">
+          <SearchOutlined />
+        </div>
+      </div>
+
+      {/* {productSearchOptions.map((product) => (
+          <AutoComplete.Option key={product._id} value={product.name}>
+            <img src={product.images[0]} alt="" />
+            {product.name}
+          </AutoComplete.Option>
+        ))}
+      </AutoComplete> */}
+
       <Table
         columns={columns}
         dataSource={data}
@@ -189,6 +244,6 @@ function ProductAdminPage() {
       </Modal>
     </section>
   );
-}
+};
 
 export default ProductAdminPage;

@@ -17,8 +17,8 @@ const getSortTitle = (sortList, _id) => {
 
 const SortBy = () => {
   const history = useHistory();
-  const { filter, onFilter } = useContext(FilterContext);
-  const { sort, order } = filter;
+  const { queryObj, onFilter } = useContext(FilterContext);
+  const { sort, order } = queryObj;
 
   let sortCheckbox = `${sort}.${order}`;
 
@@ -27,12 +27,12 @@ const SortBy = () => {
     const changedfilter =
       _id === sortCheckbox
         ? {
-            ...filter,
+            ...queryObj,
             sort: undefined,
             order: undefined,
           }
         : {
-            ...filter,
+            ...queryObj,
             sort,
             order,
           };
@@ -45,33 +45,34 @@ const SortBy = () => {
     onFilter(changedfilter);
   };
   return (
-    <li className="relative z-30 uppercase text-sm py-3 flex items-center cursor-pointer group">
-      {getSortTitle(sortList, sortCheckbox)}
-      <ChevronDownIcon className="h-4" />
-      <div className="absolute right-0 top-full border border-black bg-white w-56 px-3 py-4 space-y-3 transform transition scale-y-0 origin-top group-hover:scale-y-100">
-        {sortList.map((sort) => (
-          <div className="relative" key={sort._id}>
-            <div
-              className={`absolute left-0 top-0 w-5 h-5 rounded-sm border border-black transition duration-500 ${
-                sortCheckbox === sort._id && "bg-black"
-              } `}
+    <>
+      {sortList.map((sort) => (
+        <div className="relative" key={sort._id}>
+          <div
+            className={`w-7 h-7 md:w-5 md:h-5 absolute left-0 top-0 rounded-sm border border-black transition duration-500 ${
+              sortCheckbox === sort._id && "bg-black"
+            } `}
+          >
+            {sort._id === sortCheckbox && <CheckIcon className="text-white" />}
+          </div>
+          <input
+            id={`filter-sort-${sort._id}`}
+            type="checkbox"
+            checked={sort._id === sortCheckbox}
+            onChange={() => handleSort(sort._id)}
+            className="w-7 h-7 md:w-5 md:h-5 absolute left-0 z-10 opacity-0 cursor-pointer"
+          />
+          <div className="text-left">
+            <label
+              htmlFor={`filter-sort-${sort._id}`}
+              className="ml-10 md:ml-7 block py-1 text-sm md:text-xs cursor-pointer"
             >
-              {sort._id === sortCheckbox && <CheckIcon className="text-white" />}
-            </div>
-            <input
-              id={`filter-sort-${sort._id}`}
-              type="checkbox"
-              checked={sort._id === sortCheckbox}
-              onChange={() => handleSort(sort._id)}
-              className="absolute z-10 w-5 h-5 opacity-0 cursor-pointer"
-            />
-            <label htmlFor={`filter-sort-${sort._id}`} className="ml-6 text-xs cursor-pointer">
               {sort.name}
             </label>
           </div>
-        ))}
-      </div>
-    </li>
+        </div>
+      ))}
+    </>
   );
 };
 

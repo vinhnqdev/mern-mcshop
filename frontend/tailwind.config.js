@@ -16,6 +16,9 @@ module.exports = {
       },
       zIndex: {
         "-10": "-10",
+        100: "100",
+        1000: "1000",
+        1100: "1100",
       },
       animation: {
         slideDown: "slide-down 0.4s ease-in-out forwards",
@@ -37,8 +40,11 @@ module.exports = {
   },
   variants: {
     scale: ["group-hover"],
+    rotate: ["group-hover"],
+
     extend: {
       borderWidth: ["last"],
+      scale: ["group-focus"],
     },
   },
 

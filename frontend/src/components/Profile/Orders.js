@@ -31,7 +31,7 @@ function Orders() {
             {order.isDelivered ? "Đang xử lí" : "Đang vận chuyển"}
           </p>
 
-          <div className="md:flex md:gap-x-3">
+          <div className="space-y-2 md:flex md:gap-x-3">
             <div className="flex items-center space-x-3 md:flex-1">
               <div className="w-20 h-20 lg:w-24 lg:h-24">
                 <img src={order.image} alt={order.name} className="w-full h-full object-cover" />
@@ -47,17 +47,17 @@ function Orders() {
             </div>
 
             {/** Links */}
-            <div className="mt-5 flex gap-3 md:w-1/2 md:flex-col md:justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 md:w-1/3 md:flex-col md:justify-center">
               <Link
-                className="text-sm inline-block w-1/2 md:block md:w-full border py-1 text-center text-yellow-500 rounded-md border-yellow-500 lg:text-base lg:py-2 "
                 to={`/profile/view/${order.order_id}`}
+                className="mc_button_reverse mc_button--secondary mc_button--pos-tr mc_button--round-md mc_button--uppercase text-xs sm:text-sm text-center py-2 w-full sm:w-1/2 md:w-full"
               >
                 Xem chi tiết
               </Link>
 
               <Link
-                className="text-sm inline-block border w-1/2 md:block md:w-full py-1 text-center text-yellow-500 rounded-md border-yellow-500 lg:text-base lg:py-2"
                 to={`/profile/track/${order.order_id}`}
+                className="mc_button_reverse mc_button--primary mc_button--pos-tl mc_button--round-md mc_button--uppercase text-xs sm:text-sm text-center py-2 w-full sm:w-1/2 md:w-full"
               >
                 Theo dõi đơn hàng
               </Link>

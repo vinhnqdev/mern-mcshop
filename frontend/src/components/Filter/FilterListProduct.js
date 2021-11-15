@@ -1,7 +1,11 @@
 import { Alert } from "antd";
+import { useContext } from "react";
+import FilterContext from "../../contexts/filter-context";
 import Product from "../Products/Product";
 
-const FilterListProduct = ({ products }) => {
+const FilterListProduct = () => {
+  const { products } = useContext(FilterContext);
+
   if (products.length === 0) {
     return (
       <Alert

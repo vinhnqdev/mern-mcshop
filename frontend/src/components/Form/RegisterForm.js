@@ -50,15 +50,25 @@ function RegisterForm({ initialValues, onSubmit }) {
         />
 
         <div className="flex items-center justify-between">
-          <Button type="button" onClick={() => history.push("/login")}>
+          <Button
+            className="mc_button mc_button--secondary mc_button--pos-tr mc_button--rounded mc_button--uppercase px-6 py-2 text-lg shadow-md font-bold"
+            type="button"
+            onClick={() => history.push("/login")}
+          >
             Đăng nhập
           </Button>
-          <Button type="submit" disabled={loading}>
+          <Button
+            className="mc_button mc_button--secondary mc_button--pos-tr mc_button--rounded mc_button--uppercase px-6 py-2 text-lg shadow-md font-bold"
+            type="submit"
+            disabled={loading}
+          >
             Đăng kí
           </Button>
         </div>
         <div className="text-right underline pr-2">
-          <Link to="/forgot-password">Quên mật khẩu</Link>
+          <Link to="/forgot-password" className="text-black">
+            Quên mật khẩu
+          </Link>
         </div>
       </form>
     </div>

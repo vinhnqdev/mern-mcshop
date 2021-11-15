@@ -38,8 +38,17 @@ function LoginForm({ initialValues, onSubmit }) {
         <InputField type="password" name="password" control={control} label="Mật khẩu *" />
 
         <div className="flex items-center justify-between">
-          <Button onClick={() => history.push("/register")}>Đăng kí</Button>
-          <Button type="submit" disabled={loading}>
+          <Button
+            className="mc_button mc_button--secondary mc_button--pos-tr mc_button--rounded mc_button--uppercase px-6 py-2 text-lg shadow-md font-bold"
+            onClick={() => history.push("/register")}
+          >
+            Đăng kí
+          </Button>
+          <Button
+            className="mc_button mc_button--secondary mc_button--pos-tr mc_button--rounded mc_button--uppercase px-6 py-2 text-lg shadow-md font-bold"
+            type="submit"
+            disabled={loading}
+          >
             Đăng nhập
           </Button>
         </div>

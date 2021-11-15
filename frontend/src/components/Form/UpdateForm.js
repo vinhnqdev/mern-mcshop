@@ -52,7 +52,11 @@ function UpdateForm({ initialValues, onSubmit }) {
         />
 
         <div className="flex items-center justify-center">
-          <Button type="submit" disabled={loading}>
+          <Button
+            className="mc_button mc_button--secondary mc_button--pos-tl mc_button--round-sm mc_button--uppercase px-6 py-2 font-semibold"
+            type="submit"
+            disabled={loading}
+          >
             Cập nhật
           </Button>
         </div>

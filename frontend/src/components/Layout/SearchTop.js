@@ -6,7 +6,7 @@ import { XIcon } from "@heroicons/react/solid";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
-const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
+const loadingIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 function SearchTop({ onClose, visible }) {
   const [searchInput, setSearchInput] = useState("");
@@ -18,13 +18,18 @@ function SearchTop({ onClose, visible }) {
   const handleSearchChange = (e) => {
     const search = e.target.value;
     setSearchInput(e.target.value);
+    if (!search) {
+      setProductList([]);
+      return;
+    }
+
     if (timeoutId.current) {
       clearTimeout(timeoutId.current);
     }
     timeoutId.current = setTimeout(() => {
       setSearchLoading(true);
       productApi
-        .get({ search })
+        .get({ search: search })
         .then((res) => {
           setSearchLoading(false);
           setProductList(res.data.products);
@@ -54,7 +59,7 @@ function SearchTop({ onClose, visible }) {
       contentWrapperStyle={{
         fontFamily: "'Montserrat', sans-serif",
         width: "100%",
-        height: "70vh",
+        height: "72vh",
         // height: "auto",
         position: "unset",
       }}
@@ -83,7 +88,9 @@ function SearchTop({ onClose, visible }) {
       </div>
 
       {/** search Product List */}
-      {searchLoading && <Spin indicator={antIcon} style={{ width: "100%", marginTop: "30px" }} />}
+      {searchLoading && (
+        <Spin indicator={loadingIcon} style={{ width: "100%", marginTop: "30px" }} />
+      )}
       {!searchLoading && productList && productList.length === 0 && (
         <p className="uppercase text-center mt-8">Không tìm thấy kết quả</p>
       )}
@@ -100,7 +107,8 @@ function SearchTop({ onClose, visible }) {
             price={price}
             discount={discount}
             rating={rating}
-            searchView
+            searchTerm={searchInput}
+            onClick={onClose}
           />
         ))}
       </ul>

@@ -7,6 +7,7 @@ import { Form } from "antd";
 import TextArea from "rc-textarea";
 import productApi from "../../api/productApi";
 import { useHistory } from "react-router-dom";
+import MCButton from "../UI/Button";
 
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 const MyReviews = () => {
@@ -91,19 +92,25 @@ const MyReviews = () => {
       )}
       <ul className="grid gap-y-5 gap-x-7 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {orders?.map((order, index) => (
-          <li key={order._id} className="bg-white flex flex-col shadow p-6 space-y-5">
-            <div className="w-1/2 mx-auto md:w-4/6">
+          <li key={order._id} className="bg-white flex flex-col shadow p-6">
+            <div className="w-1/2 mx-auto md:w-4/6 mb-5">
               <img src={order.image} alt="" />
             </div>
             <p className="py-2">{order.name}</p>
-            <Button
+            <MCButton
+              onClick={() => handalOpenModal(order.productId, index)}
+              className="mc_button mc_button--primary mc_button--pos-tr mc_button--round-sm px-4 py-1 mt-auto"
+            >
+              Viết nhận xét
+            </MCButton>
+            {/* <Button
               onClick={() => handalOpenModal(order.productId, index)}
               style={{ marginTop: "auto" }}
               type="primary"
               block
             >
               Viết nhận xét
-            </Button>
+            </Button> */}
           </li>
         ))}
       </ul>
@@ -135,21 +142,19 @@ const MyReviews = () => {
             </Form.Item>
             <Form.Item>
               <div className="flex items-center gap-3">
-                <Button
-                  style={{ width: "50%" }}
-                  type="ghost"
+                <MCButton
                   onClick={() => setIsModalVisible(false)}
+                  className="mc_button_reverse mc_button--error mc_button--pos-tr mc_button--round-sm px-4 py-1 w-1/2"
                 >
                   Huỷ bỏ
-                </Button>
-                <Button
-                  style={{ width: "50%" }}
-                  htmlType="submit"
+                </MCButton>
+                <MCButton
+                  type="submit"
                   onClick={handleSubmitComment}
-                  type="primary"
+                  className="mc_button_reverse mc_button--primary mc_button--pos-tl mc_button--round-sm px-4 py-1 w-1/2"
                 >
                   Gửi đánh giá
-                </Button>
+                </MCButton>
               </div>
             </Form.Item>
           </div>

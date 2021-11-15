@@ -4,7 +4,20 @@ import { Link } from "react-router-dom";
 import { cartActions } from "../../app/cartSlice";
 import { formatCurrency } from "../../helpers/index";
 import Rating from "./Rating";
-const Product = ({ _id, images, name, price, discount, rating, buyButton }) => {
+import Highlighter from "react-highlight-words";
+import Button from "../UI/Button";
+import { Tooltip } from "antd";
+const Product = ({
+  _id,
+  images,
+  name,
+  price,
+  discount,
+  rating,
+  buyButton,
+  searchTerm,
+  onClick,
+}) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = (e) => {
@@ -25,11 +38,14 @@ const Product = ({ _id, images, name, price, discount, rating, buyButton }) => {
     <li>
       <Link
         to={`/products/${_id}`}
-        className="flex flex-col justify-items-stretch space-y-3 p-3 hover:shadow-lg group"
+        onClick={onClick ? onClick : () => {}}
+        className="flex flex-col space-y-3 p-3 hover:shadow-lg group"
       >
         {/* Img */}
         <div className="relative">
-          <img src={images[0]} alt="" />
+          <div className="aspect-h-1 aspect-w-1">
+            <img src={images[0]} alt="" />
+          </div>
           {(discount || discount !== 0) && (
             <span className="absolute z-20 block top-4 text-black left-2 bg-yellow-400 px-5 rounded-full font-semibold">
               -{discount}%
@@ -42,7 +58,21 @@ const Product = ({ _id, images, name, price, discount, rating, buyButton }) => {
 
         {/* Title */}
         <div>
-          <p className="text-sm truncate-2-lines text-gray-800">{name}</p>
+          <p className="text-sm truncate-2-lines text-gray-800 h-10">
+            {/* {name} */}
+            <Tooltip title={name}>
+              {searchTerm ? (
+                <Highlighter
+                  highlightClassName="hightlight-text"
+                  searchWords={[searchTerm]}
+                  autoEscape={true}
+                  textToHighlight={name}
+                />
+              ) : (
+                name
+              )}
+            </Tooltip>
+          </p>
         </div>
         {/* Rating */}
 
@@ -58,12 +88,12 @@ const Product = ({ _id, images, name, price, discount, rating, buyButton }) => {
         {/* Actions */}
         {buyButton && (
           <div className="relative flex items-center">
-            <button
-              className="btn-add-to-cart bg-black text-white text-xs w-1/2 rounded-sm py-2 font-semibold transition hover:bg-gray-900"
+            <Button
+              className="mc_button_reverse mc_button--secondary mc_button--pos-tl mc_button--round-sm mc_button--uppercase text-xs w-1/2 font-semibold py-2 border border-black"
               onClick={handleAddToCart}
             >
-              BUY NOW
-            </button>
+              Buy now
+            </Button>
           </div>
         )}
       </Link>
