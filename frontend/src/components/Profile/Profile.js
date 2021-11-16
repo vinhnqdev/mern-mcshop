@@ -1,8 +1,9 @@
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { message } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import { toast } from "react-toastify";
 import { update, userDetail } from "../../app/userThunk";
 import UpdateForm from "../Form/UpdateForm";
 import AddEditAddress from "./AddEditAddress";
@@ -11,36 +12,44 @@ import OrderDetail from "./OrderDetail";
 import Orders from "./Orders";
 import MyReviews from "./Reviews";
 const Profile = () => {
-  const details = useSelector((state) => state.user.userDetail);
+  const { token, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const routerMatch = useRouteMatch();
 
   // Fetch User Detail
   useEffect(() => {
-    dispatch(userDetail());
-  }, [dispatch]);
+    if (token && !user) {
+      dispatch(userDetail());
+    }
+  }, [dispatch, token, user]);
 
   const handleUpdateUserForm = async (updateInfo) => {
-    console.log(details);
-    if (updateInfo.name === details.name) {
+    if (updateInfo.name === user.name) {
       delete updateInfo.name;
     }
-    if (updateInfo.email === details.email) {
+    if (updateInfo.email === user.email) {
       delete updateInfo.email;
     }
     try {
       const actionResult = await dispatch(update(updateInfo));
-      const result = await unwrapResult(actionResult);
-      console.log(result);
-      toast.success("Update thành công");
+      await unwrapResult(actionResult);
+      message.success({
+        content: "Cập nhật thành công",
+        icon: <CheckCircleIcon className="w-10 h-10 text-green-500" />,
+        className: "custom-message custom-message-success",
+      });
     } catch (error) {
-      toast.error(error.message);
+      message.error({
+        content: error.message,
+        icon: <XCircleIcon className="w-10 h-10 text-red-600" />,
+        className: "custom-message custom-message-error",
+      });
     }
   };
 
   const initialUserValue = {
-    name: details.name,
-    email: details.email,
+    name: user?.name,
+    email: user?.email,
     password: "",
     confirmPassword: "",
   };
@@ -50,7 +59,7 @@ const Profile = () => {
       <Route path={`${routerMatch.path}/orders`}>
         <Orders />
       </Route>
-      {details && Object.keys(details).length > 0 && (
+      {user && (
         <Route path={`${routerMatch.path}/edit`}>
           <UpdateForm initialValues={initialUserValue} onSubmit={handleUpdateUserForm} />
         </Route>

@@ -15,10 +15,8 @@ function Login() {
   const handleSubmit = async (user) => {
     try {
       const actionResult = await dispatch(login(user));
-      const currentUser = unwrapResult(actionResult);
-      if (currentUser.token) {
-        history.push(redirect ? `/${redirect}` : "");
-      }
+      await unwrapResult(actionResult);
+      history.push(redirect ? `/${redirect}` : "");
     } catch (error) {
       toast.error(error.message);
     }

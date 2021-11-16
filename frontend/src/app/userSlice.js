@@ -13,8 +13,8 @@ import {
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    current: JSON.parse(localStorage.getItem("user")) || {},
-    userDetail: {},
+    token: localStorage.getItem("token") || null,
+    user: null,
     userAddress: JSON.parse(localStorage.getItem("ad")) || {},
     userAddresses: [],
     userList: [],
@@ -22,9 +22,9 @@ const userSlice = createSlice({
   },
   reducers: {
     logout: (state) => {
-      localStorage.removeItem("user");
-      state.current = {};
-      state.userDetail = {};
+      localStorage.removeItem("token");
+      state.token = null;
+      state.user = null;
       state.userAddresses = [];
     },
     updateAddress: (state, action) => {
@@ -40,7 +40,7 @@ const userSlice = createSlice({
     },
     [userDetail.fulfilled]: (state, action) => {
       state.loading = false;
-      state.userDetail = action.payload;
+      state.user = action.payload;
     },
     [login.pending]: (state) => {
       state.loading = true;
@@ -50,7 +50,8 @@ const userSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.loading = false;
-      state.current = action.payload;
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
     [register.pending]: (state) => {
       state.loading = true;
@@ -60,7 +61,8 @@ const userSlice = createSlice({
     },
     [register.fulfilled]: (state, action) => {
       state.loading = false;
-      state.current = action.payload;
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
     [update.pending]: (state) => {
       state.loading = true;
@@ -70,7 +72,8 @@ const userSlice = createSlice({
     },
     [update.fulfilled]: (state, action) => {
       state.loading = false;
-      state.current.user = action.payload;
+
+      state.user = action.payload;
     },
     [addUserAddress.pending]: (state) => {
       state.loading = true;
@@ -89,8 +92,8 @@ const userSlice = createSlice({
       state.loading = false;
     },
     [getUserAddresses.fulfilled]: (state, action) => {
-      state.loading = false;
       state.userAddresses = action.payload;
+      state.loading = false;
     },
     [getUserList.pending]: (state) => {
       state.loading = true;

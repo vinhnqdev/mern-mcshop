@@ -20,7 +20,7 @@ function PaymentMethod({ onCheckPaymentMethod, defaultPayment }) {
   };
 
   return (
-    <div className="md:col-span-4">
+    <div className="md:col-span-4 mt-8">
       <h3 className="uppercase font-bold text-3xl">Phương thức thanh toán</h3>
       <div className="bg-white shadow-xl mt-7 p-4 space-y-3">
         {paymentMethodData.map((checkbox) => (

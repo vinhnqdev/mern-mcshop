@@ -16,9 +16,8 @@ function ShippingPage() {
   const history = useHistory();
 
   const [formIsShown, setFormIsShow] = useState(false);
+  const { userAddresses, loading } = useSelector((state) => state.user);
 
-  const userAddresses = useSelector((state) => state.user.userAddresses);
-  const loading = useSelector((state) => state.user.loading);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editAddressId, setEditAddressId] = useState();
   const [removeAddressId, setRemoveAddressId] = useState();
@@ -109,6 +108,13 @@ function ShippingPage() {
     ...editAddress,
   };
 
+  console.log(loading);
+  console.log(userAddresses);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <div>
@@ -117,7 +123,6 @@ function ShippingPage() {
             <p className="font-semibold text-lg">Địa chỉ giao hàng</p>
             <p className="text-sm md:text-base">Chọn địa chỉ giao hàng có sẵn bên dưới</p>
             <UserAddressList
-              // loading={loading}
               userAddresses={userAddresses}
               onEdit={handleEditAddress}
               onRemove={handleOpenModal}
@@ -131,24 +136,22 @@ function ShippingPage() {
           </span>
         </div>
       </div>
-      {loading && <Loading />}
+
       {((formIsShown && !isEditMode) || (formIsShown && isEditMode && !loading)) && (
         <ShippingForm initialValues={initialValues} onSubmit={handleShippingSubmit} />
       )}
 
-      {isModalVisible && (
-        <Modal onClose={() => setIsModalVisible(false)}>
-          <p className="">Bạn muốn xoá sản phẩm này?</p>
-          <div className="flex justify-end gap-4">
-            <Button type="ghost" onClick={() => setIsModalVisible(false)}>
-              Không
-            </Button>
-            <Button type="primary" danger onClick={handleDropAddress}>
-              Xoá
-            </Button>
-          </div>
-        </Modal>
-      )}
+      <Modal visible={isModalVisible} onClose={() => setIsModalVisible(false)}>
+        <p className="">Bạn muốn xoá sản phẩm này?</p>
+        <div className="flex justify-end gap-4">
+          <Button type="ghost" onClick={() => setIsModalVisible(false)}>
+            Không
+          </Button>
+          <Button type="primary" danger onClick={handleDropAddress}>
+            Xoá
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

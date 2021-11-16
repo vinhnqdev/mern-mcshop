@@ -1,19 +1,29 @@
 import React from "react";
-import { Carousel } from "antd";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 function Slider() {
   return (
-    <Carousel style={{ marginBottom: "50px" }} autoplay autoplaySpeed={3000}>
-      <div>
-        <img className="w-full object-cover" src="/images/slide1.jpeg" alt="slide1" />
-      </div>
-      <div>
-        <img className="w-full object-cover" src="/images/slide2.jpeg" alt="slide2" />
-      </div>
-      <div>
-        <img className="w-full object-cover" src="/images/slide3.jpeg" alt="slide3" />
-      </div>
-    </Carousel>
+    <div className="hidden sm:block">
+      <Swiper
+        spaceBetween={20}
+        slidesPerView={1}
+        loop={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+      >
+        <SwiperSlide>
+          <img className="w-full object-cover" src="/images/slide1.jpeg" alt="slide1" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img className="w-full object-cover" src="/images/slide2.jpeg" alt="slide2" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img className="w-full object-cover" src="/images/slide3.jpeg" alt="slide3" />
+        </SwiperSlide>
+      </Swiper>
+    </div>
   );
 }
 

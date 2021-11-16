@@ -41,7 +41,6 @@ module.exports = {
   variants: {
     scale: ["group-hover"],
     rotate: ["group-hover"],
-
     extend: {
       borderWidth: ["last"],
       scale: ["group-focus"],

@@ -62,7 +62,7 @@ function CartItem({ item }) {
     <li className="bg-white flex space-x-3 md:space-x-7 lg:space-x-10">
       {/** LEFT */}
       <div className="flex items-center space-x-2">
-        <div className="bg-gray-300 p-1 rounded-full">
+        <div className="hidden sm:block bg-gray-300 p-1 rounded-full">
           <TrashIcon className="h-6 text-white cursor-pointer" onClick={() => openModal("trash")} />
         </div>
         <div className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
@@ -77,11 +77,11 @@ function CartItem({ item }) {
       {/** RIGHT */}
       <div className="space-y-2 lg:w-full lg:grid lg:grid-cols-4 items-center">
         {/** Name */}
-        <h4 className="uppercase font-semibold text-gray-800 md:text-lg lg:col-span-2 lg:font-bold">
+        <h4 className="uppercase truncate-2-lines font-semibold text-gray-800 md:text-lg lg:col-span-2 lg:font-bold">
           {item.name}
         </h4>
         {/** Price */}
-        <div className="flex items-center space-x-4 lg:flex-col lg:col-span-1 lg:space-x-0">
+        <div className="sm:flex lg:flex-col items-center sm:space-x-4 lg:col-span-1 lg:space-x-0">
           <p className="text-sm mb-2 uppercase font-medium text-gray-600 line-through md:text-base lg:order-1">
             {formatCurrency(originalPrice, "vi-VN", "VND")}
           </p>

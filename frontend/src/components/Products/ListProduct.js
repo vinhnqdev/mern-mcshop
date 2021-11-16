@@ -15,6 +15,9 @@ const ListProduct = ({ products, loading, title, buyButton }) => {
   const navigationNextRef = useRef(null);
 
   const breakpoints = {
+    380: {
+      slidesPerView: 2,
+    },
     640: {
       slidesPerView: 3,
     },
@@ -28,12 +31,12 @@ const ListProduct = ({ products, loading, title, buyButton }) => {
 
   return (
     <section>
-      <h2 className="text-2xl px-1 font-bold uppercase">{title}</h2>
+      <h2 className="text-xl sm:text-2xl px-1 font-bold uppercase">{title}</h2>
       {loading && <Loading />}
       {!loading && products && (
         <Swiper
           spaceBetween={20}
-          slidesPerView={2}
+          slidesPerView={1}
           onInit={(swiper) => {
             swiper.params.navigation.prevEl = navigationPrevRef.current;
             swiper.params.navigation.nextEl = navigationNextRef.current;

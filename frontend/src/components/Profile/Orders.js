@@ -55,12 +55,12 @@ function Orders() {
                 Xem chi tiết
               </Link>
 
-              <Link
+              {/* <Link
                 to={`/profile/track/${order.order_id}`}
                 className="mc_button_reverse mc_button--primary mc_button--pos-tl mc_button--round-md mc_button--uppercase text-xs sm:text-sm text-center py-2 w-full sm:w-1/2 md:w-full"
               >
                 Theo dõi đơn hàng
-              </Link>
+              </Link> */}
             </div>
           </div>
         </li>

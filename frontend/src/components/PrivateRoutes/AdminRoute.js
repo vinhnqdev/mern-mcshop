@@ -12,8 +12,7 @@ import { useHistory } from "react-router-dom";
 function AdminRoute({ redirectPath, ...props }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const user = useSelector((state) => state.user.userDetail);
-  const currentStorage = useSelector((state) => state.user.current);
+  const { user, token } = useSelector((state) => state.user);
   const history = useHistory();
 
   useEffect(() => {
@@ -34,14 +33,14 @@ function AdminRoute({ redirectPath, ...props }) {
     return <Loading />;
   }
 
-  if (!currentStorage) {
+  if (!token) {
     return (
       <Route>
         <Redirect to="/login" />
       </Route>
     );
   }
-  return user.isAdmin ? (
+  return user?.isAdmin ? (
     <Route {...props}>{props.children}</Route>
   ) : (
     <Result

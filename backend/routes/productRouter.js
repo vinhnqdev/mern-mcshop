@@ -124,7 +124,7 @@ router.post(
       (review) => review.user.toString() === req.user._id.toString()
     );
     if (productReviewedByUser) {
-      return res.status(400).send({ message: "You reviewed for this product" });
+      return res.status(400).send({ message: "Bạn đã review sản phẩm này." });
     }
 
     const { title, rating, comment } = req.body;

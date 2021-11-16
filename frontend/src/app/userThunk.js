@@ -7,7 +7,7 @@ import userApi from "../api/userApi";
 export const login = createAsyncThunk("user/login", async (params, thunkAPI) => {
   try {
     const response = await userApi.login(params);
-    localStorage.setItem("user", JSON.stringify(response.data));
+    localStorage.setItem("token", response.data.token);
     return response.data;
   } catch (error) {
     throw new Error(
@@ -19,7 +19,7 @@ export const login = createAsyncThunk("user/login", async (params, thunkAPI) => 
 export const register = createAsyncThunk("user/register", async (params, thunkAPI) => {
   try {
     const response = await userApi.register(params);
-    localStorage.setItem("user", JSON.stringify(response.data));
+    localStorage.setItem("token", response.data.token);
     return response.data;
   } catch (error) {
     throw new Error(error.response && error.response.data.message);
@@ -29,9 +29,6 @@ export const register = createAsyncThunk("user/register", async (params, thunkAP
 export const update = createAsyncThunk("user/update", async (params, thunkAPI) => {
   try {
     const response = await userApi.update(params);
-    const currentlocalStorageUser = JSON.parse(localStorage.getItem("user"));
-    const newlocalStorageUser = { ...currentlocalStorageUser, user: response.data };
-    localStorage.setItem("user", JSON.stringify(newlocalStorageUser));
     return response.data;
   } catch (error) {
     throw new Error((error.response && error.response.data.message) || error.message);

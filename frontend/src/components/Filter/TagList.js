@@ -7,11 +7,13 @@ import FilterContext from "../../contexts/filter-context";
 import { productsActions } from "../../app/productsSlice";
 const getCategoryName = (id, categoryList) => {
   const category = categoryList.find((category) => category._id === id);
+  if (!category) return "";
   if (category) return category.name;
 };
 
 const getBrandName = (id, brandList) => {
   const brand = brandList.find((brand) => brand._id === id);
+  if (!brand) return "";
   if (brand) return brand.name;
 };
 
@@ -79,9 +81,11 @@ const TagList = ({ tagList }) => {
     <ul className="flex flex-wrap items-center">
       {newTagList?.map((tag, index) => (
         <li key={index} className="mb-2">
-          <Tag closable={tag.type !== "all"} visible={true} onClose={() => handleCloseTag(tag)}>
-            {tag.title.toUpperCase()}
-          </Tag>
+          {tag.title && (
+            <Tag closable={tag.type !== "all"} visible={true} onClose={() => handleCloseTag(tag)}>
+              {tag.title.toUpperCase()}
+            </Tag>
+          )}
         </li>
       ))}
 

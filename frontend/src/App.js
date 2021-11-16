@@ -9,6 +9,7 @@ import { FilterProvider } from "./contexts/filter-context";
 import AddEditProductPage from "./pages/AddEditProductPage";
 import AllProductPage from "./pages/AllProductPage";
 import CartPage from "./pages/CartPage";
+import CategoryPage from "./pages/CategoryPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import OrderAdminPage from "./pages/OrderAdminPage";
@@ -33,6 +34,10 @@ function App() {
           <Switch>
             <Route path="/" exact>
               <HomePage />
+            </Route>
+
+            <Route path="/category">
+              <CategoryPage />
             </Route>
 
             <Route path="/products" exact>

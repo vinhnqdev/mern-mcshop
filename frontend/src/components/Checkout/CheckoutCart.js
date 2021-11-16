@@ -8,6 +8,7 @@ import { createOrder } from "../../app/orderThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { cartActions } from "../../app/cartSlice";
+import Button from "../UI/Button";
 function CheckoutCart() {
   const cart = useSelector((state) => state.cart.cart);
   const loading = useSelector((state) => state.order.loading);
@@ -73,7 +74,7 @@ function CheckoutCart() {
         {/** Đơn hàng */}
         <div className="flex items-center space-x-5 lg:grid lg:grid-cols-6 lg:space-x-0">
           <div className="md:col-span-4 md:flex items-center space-x-8">
-            <h3 className="text-xl uppercase font-bold md:text-2xl lg:text-3xl lg:font-bold">
+            <h3 className="text-xl uppercase mb-0 font-bold md:text-2xl lg:text-3xl lg:font-bold">
               Đơn hàng
             </h3>
             <span className="hidden md:inline-block uppercase text-gray-500 text-lg">
@@ -85,7 +86,7 @@ function CheckoutCart() {
         {/** List Product */}
         <div className="bg-white shadow-xl mt-5">
           {/** Cart List */}
-          <ul className="space-y-5 px-4 py-5">
+          <ul className="space-y-5 px-4 py-5 max-h-96 overflow-y-scroll scrollbar-hide">
             {cart.map((item) => (
               <CheckoutCartItem key={item._id} item={item} />
             ))}
@@ -134,16 +135,13 @@ function CheckoutCart() {
         {/** Actions */}
         <div className="md:col-span-2">
           <div className="bg-white shadow-xl mt-7 p-4 space-y-3">
-            <button
+            <Button
               onClick={handleOrder}
               disabled={loading}
-              className={`relative group z-10 block w-full p-3 border ${
-                loading ? "bg-opacity-40 cursor-not-allowed" : "bg-opacity-100 cursor-pointer"
-              } hover:text-black hover:border-yellow-500 rounded-full text-white uppercase font-semibold lg:rounded-none lg:p-4 lg:text-lg`}
+              className="mc_button mc_button--primary mc_button--pos-tl mc_button--round-sm uppercase font-semibold w-full px-4 py-3"
             >
-              <span className="absolute -z-10 top-0 left-0 w-full h-full origin-right bg-yellow-500 transition transform group-hover:scale-x-0"></span>
               Đặt hàng
-            </button>
+            </Button>
           </div>
         </div>
       </div>

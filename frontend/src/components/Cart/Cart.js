@@ -19,7 +19,6 @@ function Cart() {
   }, 0);
 
   const handleCheckout = () => {
-    console.log("Clicked");
     if (cart.length === 0) {
       return message.error({
         content: "Giỏ hàng rỗng",
@@ -45,8 +44,8 @@ function Cart() {
               {`( ${itemQuantity} Sản phẩm )`}
             </span>
           </div>
-          <p className="text-gray-600 font-bold hidden lg:block">Giá tiền</p>
-          <p className="text-gray-600 font-bold hidden lg:block">Số lượng</p>
+          <p className="text-gray-600 mb-0 font-bold hidden lg:block">Giá tiền</p>
+          <p className="text-gray-600 mb-0 font-bold hidden lg:block">Số lượng</p>
           <div className="h-px bg-gray-500 flex-1 lg:hidden"></div>
         </div>
 
@@ -106,14 +105,14 @@ function Cart() {
           <MCButton
             // disabled={cart.length === 0}
             onClick={handleCheckout}
-            className="mc_button mc_button--primary mc_button--pos-tl mc_button--round-md mc_button--uppercase w-full py-4 font-semibold"
+            className="mc_button mc_button--primary mc_button--pos-tl mc_button--round-sm mc_button--uppercase w-full py-4 font-semibold"
           >
             Mua ngay
           </MCButton>
 
           <MCButton
             onClick={() => history.push("/")}
-            className="mc_button_reverse mc_button--secondary mc_button--pos-tr mc_button--round-md mc_button--uppercase w-full py-4 font-semibold"
+            className="mc_button_reverse mc_button--secondary mc_button--pos-tr mc_button--round-sm mc_button--uppercase w-full py-4 font-semibold"
           >
             Quay về cửa hàng
           </MCButton>

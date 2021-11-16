@@ -11,7 +11,7 @@ import { formatCurrency } from "../helpers";
 import { AutoComplete, Collapse, Drawer, Pagination } from "antd";
 import FilterContext from "../contexts/filter-context";
 import { productsActions } from "../app/productsSlice";
-import { AdjustmentsIcon } from "@heroicons/react/solid";
+import { AdjustmentsIcon, ArrowNarrowRightIcon } from "@heroicons/react/solid";
 import CategoryFilter from "../components/Filter/CategoryFilter";
 import BrandFilter from "../components/Filter/BrandFilter";
 import PriceRangeFilter from "../components/Filter/PriceRangeFilter";
@@ -245,7 +245,11 @@ const AllProductPage = () => {
       )}
 
       <Drawer
-        title={<h2 className="uppercase text-2xl">Lọc theo</h2>}
+        title={
+          <h2 className="uppercase text-2xl flex items-center">
+            Lọc theo <AdjustmentsIcon className="h-7 ml-2" />{" "}
+          </h2>
+        }
         placement="right"
         headerStyle={{
           padding: "16px 16px",
@@ -295,6 +299,14 @@ const AllProductPage = () => {
             </div>
           </Collapse.Panel>
         </Collapse>
+
+        <div
+          onClick={() => setVisibleFilterDrawer(false)}
+          className="fixed left-0 px-4 right-0 bottom-5 bg-black flex items-center justify-between"
+        >
+          <button className="text-white py-4 uppercase font-semibold">{`Áp dụng (${total})`}</button>
+          <ArrowNarrowRightIcon className="h-6 text-white" />
+        </div>
       </Drawer>
     </section>
   );

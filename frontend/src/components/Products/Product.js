@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { cartActions } from "../../app/cartSlice";
@@ -7,17 +7,10 @@ import Rating from "./Rating";
 import Highlighter from "react-highlight-words";
 import Button from "../UI/Button";
 import { Tooltip } from "antd";
-const Product = ({
-  _id,
-  images,
-  name,
-  price,
-  discount,
-  rating,
-  buyButton,
-  searchTerm,
-  onClick,
-}) => {
+const Product = (
+  { _id, images, name, price, discount, rating, buyButton, searchTerm, onClick },
+  ref
+) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = (e) => {
@@ -35,7 +28,7 @@ const Product = ({
   };
 
   return (
-    <li>
+    <li ref={ref}>
       <Link
         to={`/products/${_id}`}
         onClick={onClick ? onClick : () => {}}
@@ -89,7 +82,7 @@ const Product = ({
         {buyButton && (
           <div className="relative flex items-center">
             <Button
-              className="mc_button_reverse mc_button--secondary mc_button--pos-tl mc_button--round-sm mc_button--uppercase text-xs w-1/2 font-semibold py-2 border border-black"
+              className="mc_button_reverse mc_button--secondary mc_button--pos-tl mc_button--round-sm mc_button--uppercase text-xs w-full sm:w-3/4 lg:w-1/2 font-semibold py-2 border border-black"
               onClick={handleAddToCart}
             >
               Buy now
@@ -101,4 +94,4 @@ const Product = ({
   );
 };
 
-export default Product;
+export default forwardRef(Product);

@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/solid";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Drawer, Dropdown } from "antd";
+import { Drawer, Dropdown } from "antd";
 import SearchTop from "./SearchTop";
 import MainNav from "./MainNav";
 import { Collapse, Menu } from "antd";
@@ -18,6 +18,8 @@ import { Link } from "react-router-dom";
 import { userActions } from "../../app/userSlice";
 import Tabs from "../Profile/Tabs";
 import { productsActions } from "../../app/productsSlice";
+import { capitalizeText } from "../../helpers/text";
+import { userDetail } from "../../app/userThunk";
 
 const { Panel } = Collapse;
 
@@ -27,7 +29,7 @@ const Header = ({ hidden }) => {
   const firstRender = useRef(true);
   let timerIdRef = useRef();
   const [isShownCartNotification, setIsShownCartNotification] = useState(false);
-  const { user } = useSelector((state) => state.user.current);
+  const { user, token } = useSelector((state) => state.user);
   const cart = useSelector((state) => state.cart.cart);
   const messageAction = useSelector((state) => state.cart.messageAction);
   const categoryList = useSelector((state) => state.category.categoryList);
@@ -38,6 +40,12 @@ const Header = ({ hidden }) => {
   const cartQuantity = cart.reduce((acc, product) => {
     return acc + product.quantity;
   }, 0);
+
+  useEffect(() => {
+    if (token && !user) {
+      dispatch(userDetail());
+    }
+  }, [dispatch, token, user]);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -226,26 +234,11 @@ const Header = ({ hidden }) => {
         </div>
       </div>
       <Drawer
-        title={
-          !user ? (
-            <Button
-              type="primary"
-              onClick={() => {
-                history.push("/login");
-                onCloseDrawer();
-              }}
-            >
-              Đăng nhập
-            </Button>
-          ) : (
-            <div>
-              <p>Xin chào {user.name}</p>
-
-              <Tabs onChange={onCloseDrawer} isAdmin={user?.isAdmin} mbScreen />
-            </div>
-          )
-        }
+        title={<h2 className="text-center uppercase">MCShop</h2>}
         placement="left"
+        bodyStyle={{
+          padding: 0,
+        }}
         contentWrapperStyle={{
           fontFamily: "'Montserrat', sans-serif",
           width: "100%",
@@ -255,13 +248,16 @@ const Header = ({ hidden }) => {
       >
         <Collapse
           accordion
-          ghost={true}
+          // ghost={true}
           bordered={false}
           style={{ backgroundColor: "#fff" }}
           expandIconPosition="right"
         >
-          <Panel header={<h3 className="m-0 uppercase font-semibold text-lg">Sản phẩm</h3>} key="1">
-            <ul className="">
+          <Panel header={<h3 className="uppercase font-semibold">Thông tin tài khoản</h3>}>
+            <Tabs onChange={onCloseDrawer} isAdmin={user?.isAdmin} mbScreen />
+          </Panel>
+          <Panel header={<h3 className="uppercase font-semibold">Sản phẩm</h3>} key="1">
+            <ul>
               {categoryList.map((category) => (
                 <li key={category._id}>
                   <Link
@@ -274,20 +270,18 @@ const Header = ({ hidden }) => {
                       onCloseDrawer();
                     }}
                     to={`/products?category=${category._id}`}
-                    className="uppercase text-md font-semibold block py-3 px-5 text-black"
+                    className="flex items-center text-md font-normal py-2 text-black"
                   >
-                    {category.name}
+                    <img className="w-8" src={category.image} alt={category.name} />{" "}
+                    <span className="ml-2">{capitalizeText(category.name)}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </Panel>
 
-          <Panel
-            header={<h3 className="m-0 uppercase font-semibold text-lg">Thương hiệu</h3>}
-            key="2"
-          >
-            <ul className="">
+          <Panel header={<h3 className="uppercase font-semibold">Thương hiệu</h3>} key="2">
+            <ul>
               {brandList.map((brand) => (
                 <li key={brand._id}>
                   <Link
@@ -300,9 +294,10 @@ const Header = ({ hidden }) => {
                       onCloseDrawer();
                     }}
                     to={`products?brand=${brand._id}`}
-                    className="uppercase text-md font-semibold block py-3 px-5 text-black"
+                    className="flex items-center text-md font-normal py-2 px-2 text-black"
                   >
-                    {brand.name}
+                    <img className="w-7" src={brand.image} alt={brand.name} />{" "}
+                    <span className="ml-2">{capitalizeText(brand.name)}</span>
                   </Link>
                 </li>
               ))}
