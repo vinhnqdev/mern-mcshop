@@ -15,7 +15,7 @@ const userSlice = createSlice({
   initialState: {
     token: localStorage.getItem("token") || null,
     user: null,
-    userAddress: JSON.parse(localStorage.getItem("ad")) || {},
+    userAddress: JSON.parse(localStorage.getItem("address")) || {},
     userAddresses: [],
     userList: [],
     loading: false,
@@ -23,11 +23,13 @@ const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem("token");
+      localStorage.removeItem("address");
       state.token = null;
       state.user = null;
       state.userAddresses = [];
     },
     updateAddress: (state, action) => {
+      localStorage.setItem("address", JSON.stringify(action.payload));
       state.userAddress = action.payload;
     },
   },

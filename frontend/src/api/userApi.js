@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from "../helpers/getTokenFromStorage";
+import { getToken } from "utils";
 const userApi = {
   // POST /api/users/login
   login: (data) => {

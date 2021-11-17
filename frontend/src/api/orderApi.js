@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from "../helpers";
+import { getToken } from "utils";
 
 const orderApi = {
   add: (order) => {

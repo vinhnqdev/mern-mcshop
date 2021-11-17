@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from "../helpers/getTokenFromStorage";
+import { getToken } from "utils";
 const addressApi = {
   add: (shippingAddress) => {
     const url = "/api/addresses/me";

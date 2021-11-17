@@ -1,6 +1,6 @@
 // import axiosClient from "./axiosClient";
 import axios from "axios";
-import { getToken } from "../helpers";
+import { getToken } from "utils";
 
 const productApi = {
   get(params) {
