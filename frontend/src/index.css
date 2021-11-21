@@ -3,6 +3,17 @@
 @tailwind components;
 @tailwind utilities;
 
+.rounded-icon {
+  @apply bg-white rounded-full text-black cursor-pointer p-2 h-10;
+}
+.header {
+  @apply fixed z-1100 left-0 top-0 right-0 bg-black text-white flex items-center justify-between px-5 md:px-7 h-20 md:h-24;
+}
+
+.main-nav__item {
+  @apply relative group uppercase font-normal cursor-pointer h-full flex items-center p-1 mx-3;
+}
+
 .swiper-container {
   padding: 0 5px !important;
 }
@@ -35,22 +46,6 @@
   align-items: center;
   gap: 5px;
 }
-
-/*Main Carousel*/
-/* .ant-carousel .slick-dots-bottom {
-  bottom: -30px !important;
-}
-
-.ant-carousel .slick-dots li {
-  width: 30px !important;
-}
-.ant-carousel .slick-dots li button {
-  height: 6px !important;
-  background-color: #fbbf24 !important;
-}
-.ant-carousel .slick-dots li.slick-active {
-  width: 50px !important;
-} */
 
 /*Rating*/
 .ant-rate.ant-custom-rating {

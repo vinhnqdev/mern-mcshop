@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import LoadingPlaceHolder from "./LoadingPlaceHolder";
 
 function Slider() {
+  const [loaded, setLoaded] = useState(false);
+
+  const handleLoaded = () => {
+    setLoaded(true);
+  };
+
   return (
     <div className="hidden sm:block">
       <Swiper
@@ -9,18 +16,42 @@ function Slider() {
         slidesPerView={1}
         loop={true}
         autoplay={{
-          delay: 3000,
+          delay: 6000,
           disableOnInteraction: false,
         }}
       >
         <SwiperSlide>
-          <img className="w-full object-cover" src="/images/slide1.jpeg" alt="slide1" />
+          <div style={{ width: "100%", aspectRatio: "4/1", overflow: "hidden" }}>
+            {!loaded && <LoadingPlaceHolder extraStyles={{ width: "100%", height: "100%" }} />}
+            <img
+              className="w-full object-cover"
+              onLoad={handleLoaded}
+              src="/images/slide1.jpeg"
+              alt="slide1"
+            />
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <img className="w-full object-cover" src="/images/slide2.jpeg" alt="slide2" />
+          <div style={{ width: "100%", aspectRatio: "4/1", overflow: "hidden" }}>
+            {!loaded && <LoadingPlaceHolder extraStyles={{ width: "100%", height: "100%" }} />}
+            <img
+              className="w-full object-cover"
+              onLoad={handleLoaded}
+              src="/images/slide2.jpeg"
+              alt="slide2"
+            />
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <img className="w-full object-cover" src="/images/slide3.jpeg" alt="slide3" />
+          <div style={{ width: "100%", aspectRatio: "4/1", overflow: "hidden" }}>
+            {!loaded && <LoadingPlaceHolder extraStyles={{ width: "100%", height: "100%" }} />}
+            <img
+              className="w-full object-cover"
+              onLoad={handleLoaded}
+              src="/images/slide3.jpeg"
+              alt="slide3"
+            />
+          </div>
         </SwiperSlide>
       </Swiper>
     </div>

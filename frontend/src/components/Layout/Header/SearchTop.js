@@ -1,10 +1,9 @@
-import { Drawer } from "antd";
-import React, { useRef, useState } from "react";
-import productApi from "../../../api/productApi";
-import { Product } from "../../Common";
-import { XIcon } from "@heroicons/react/solid";
-import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { XIcon } from "@heroicons/react/solid";
+import { Drawer, Spin } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import productApi from "api/productApi";
+import { Product } from "components/Common";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
@@ -52,9 +51,14 @@ function SearchTop({ onClose, visible }) {
     handleClearSearchProduct();
   };
 
+  useEffect(() => {
+    if (visible) {
+      inputRef.current.focus();
+    }
+  }, [visible]);
+
   return (
     <Drawer
-      title="Reviews"
       placement="top"
       contentWrapperStyle={{
         fontFamily: "'Montserrat', sans-serif",
@@ -68,7 +72,7 @@ function SearchTop({ onClose, visible }) {
       }}
       visible={visible}
     >
-      <div className="max-w-xl mx-auto px-4 py-4 flex items-center space-x-10">
+      <div className="max-w-xl mx-auto p-4 flex items-center space-x-10">
         <form className="relative flex-1">
           <input
             className="w-full font-mont outline-none text-gray-900  text-sm py-2 border-b border-gray-400"

@@ -9,6 +9,27 @@
   }
 }
 
+@keyframes scale-up {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes loaderSwipeAnim {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
 .activeNav {
   font-weight: 600;
 }

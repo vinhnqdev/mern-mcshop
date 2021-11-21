@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getBrandList } from "../../../app/brandThunk";
-import { getCategoryList } from "../../../app/categoryThunk";
-import { productsActions } from "../../../app/productsSlice";
+import { getBrandList } from "app/brandThunk";
+import { getCategoryList } from "app/categoryThunk";
+import { productsActions } from "app/productsSlice";
+import Linear from "components/UI/Linear";
 
 const MainNav = () => {
   const dispatch = useDispatch();
@@ -16,12 +17,12 @@ const MainNav = () => {
   }, [dispatch]);
 
   return (
-    <ul className="hidden md:flex items-center m-0 space-x-3 h-full ">
-      <li className="uppercase h-full flex items-center font-normal p-1 m-3 cursor-pointer relative group">
+    <ul className="hidden md:flex md:items-center m-0 h-full">
+      <li className="main-nav__item">
         Sản phẩm
-        <div className="absolute left-0 top-16 w-full scale-x-0 transition origin-left transform h-0.5 bg-white group-hover:scale-x-100"></div>
+        <Linear />
         {/** Subnav */}
-        <ul className="absolute -left-1 transform transition origin-top scale-y-0 group-hover:scale-y-100 top-full bg-white w-60 shadow-md py-3">
+        <ul className="absolute top-full left-0 w-60 bg-white shadow-md md:rounded-sm py-3 transition transform origin-top scale-y-0 group-hover:scale-y-100">
           {categoryList.map((category) => (
             <li key={category._id}>
               <Link
@@ -38,10 +39,10 @@ const MainNav = () => {
         </ul>
       </li>
 
-      <li className="uppercase h-full flex items-center font-normal p-1 m-3 cursor-pointer relative group">
+      <li className="main-nav__item">
         Thương hiệu
-        <div className="absolute top-16 left-0 w-full scale-x-0 transition origin-left transform h-0.5 bg-white group-hover:scale-x-100"></div>
-        <ul className="absolute -left-1 transform transition origin-top scale-y-0 group-hover:scale-y-100 top-full bg-white w-60 shadow-md py-3">
+        <Linear />
+        <ul className="absolute top-full left-0 w-60 bg-white shadow-md md:rounded-sm py-3 transition transform origin-top scale-y-0 group-hover:scale-y-100">
           {brandList.map((brand) => (
             <li key={brand._id}>
               <Link

@@ -5,7 +5,6 @@ import "swiper/components/navigation/navigation.min.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/swiper.min.css";
-import Loading from "../UI/Loading";
 import { Product } from "./Product";
 
 // install Swiper modules
@@ -41,25 +40,36 @@ export const ListProduct = ({
       <h2 style={headerStyle} className="text-xl sm:text-2xl px-1 font-bold uppercase">
         {title}
       </h2>
-      {loading && <Loading />}
-      {!loading && products && (
-        <Swiper
-          spaceBetween={20}
-          slidesPerView={1}
-          onInit={(swiper) => {
-            swiper.params.navigation.prevEl = navigationPrevRef.current;
-            swiper.params.navigation.nextEl = navigationNextRef.current;
-            swiper.navigation.init();
-            swiper.navigation.update();
-          }}
-          breakpoints={breakpoints}
-          loop={true}
-          autoplay={{
-            delay: 30000000,
-            disableOnInteraction: false,
-          }}
-        >
-          {products?.map(({ _id, images, name, discount, price, rating }) => (
+      {/* {loading && <Loading />} */}
+      {/* {!loading && products && ( */}
+      <Swiper
+        spaceBetween={20}
+        slidesPerView={1}
+        onInit={(swiper) => {
+          swiper.params.navigation.prevEl = navigationPrevRef.current;
+          swiper.params.navigation.nextEl = navigationNextRef.current;
+          swiper.navigation.init();
+          swiper.navigation.update();
+        }}
+        breakpoints={breakpoints}
+        loop={true}
+        autoplay={{
+          delay: 7000,
+          disableOnInteraction: false,
+        }}
+      >
+        {loading &&
+          Array(5)
+            .fill()
+            .map((x, ind) => (
+              <SwiperSlide key={ind}>
+                <Product isSkeleton={true} buyButton={true} />
+              </SwiperSlide>
+            ))}
+
+        {!loading &&
+          products &&
+          products?.map(({ _id, images, name, discount, price, rating }) => (
             <SwiperSlide key={_id}>
               <Product
                 key={_id}
@@ -74,16 +84,16 @@ export const ListProduct = ({
             </SwiperSlide>
           ))}
 
-          <div className="flex justify-center items-center mt-3">
-            <div className="p-2 cursor-pointer" ref={navigationPrevRef}>
-              <ChevronLeftIcon className="h-7" />
-            </div>
-            <div className="p-2 cursor-pointer" ref={navigationNextRef}>
-              <ChevronRightIcon className="h-7" />
-            </div>
+        <div className="flex justify-center items-center mt-3">
+          <div className="p-2 cursor-pointer" ref={navigationPrevRef}>
+            <ChevronLeftIcon className="h-7" />
           </div>
-        </Swiper>
-      )}
+          <div className="p-2 cursor-pointer" ref={navigationNextRef}>
+            <ChevronRightIcon className="h-7" />
+          </div>
+        </div>
+      </Swiper>
+      {/* )} */}
     </div>
   );
 };

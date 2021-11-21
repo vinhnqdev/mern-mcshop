@@ -22,6 +22,7 @@ module.exports = {
       },
       animation: {
         slideDown: "slide-down 0.4s ease-in-out forwards",
+        scaleUp: "scale-up 0.1s",
       },
       truncate: {
         lines: {
