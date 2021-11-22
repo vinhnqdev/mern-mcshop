@@ -57,8 +57,9 @@ function AddEditProductPage() {
           })
         );
         await unwrapResult(actionResult);
+
         message.success({
-          content: "Cập nhật sản phẩm thành công",
+          content: "Cập nhật thành công",
           icon: <CheckCircleIcon className="w-10 h-10 text-green-500" />,
           className: "custom-message custom-message-success",
         });

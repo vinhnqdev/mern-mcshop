@@ -21,6 +21,10 @@
 /*Custom Message Antd*/
 /*Message*/
 
+.ant-message {
+  z-index: 1110 !important;
+}
+
 .custom-message {
   font-family: "Montserrat";
   display: flex;

@@ -3,8 +3,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { register } from "app/userThunk";
 import RegisterForm from "./components/RegisterForm";
-import { toast } from "react-toastify";
 import { useHistory } from "react-router";
+import { message } from "antd";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -12,12 +13,21 @@ function Login() {
   const handleSubmit = async ({ name, email, password }) => {
     try {
       const actionResult = await dispatch(register({ name, email, password }));
-      const currentUser = unwrapResult(actionResult);
+      const currentUser = await unwrapResult(actionResult);
       if (currentUser.token) {
         history.push("/");
       }
+      message.success({
+        content: "Đăng kí thành công",
+        icon: <CheckCircleIcon className="w-10 h-10 text-green-500" />,
+        className: "custom-message custom-message-success",
+      });
     } catch (error) {
-      toast.error(error.message);
+      message.error({
+        content: error.message,
+        icon: <XCircleIcon className="w-10 h-10 text-red-600" />,
+        className: "custom-message custom-message-error",
+      });
     }
   };
 

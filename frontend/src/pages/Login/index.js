@@ -4,8 +4,9 @@ import { useDispatch } from "react-redux";
 import { login } from "app/userThunk";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory, useLocation } from "react-router";
-import { toast } from "react-toastify";
 import queryString from "query-string";
+import { message } from "antd";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -16,9 +17,18 @@ function Login() {
     try {
       const actionResult = await dispatch(login(user));
       await unwrapResult(actionResult);
+      message.success({
+        content: "Đăng nhập thành công",
+        icon: <CheckCircleIcon className="w-10 h-10 text-green-500" />,
+        className: "custom-message custom-message-success",
+      });
       history.push(redirect ? `/${redirect}` : "");
     } catch (error) {
-      toast.error(error.message);
+      message.error({
+        content: error.message,
+        icon: <XCircleIcon className="w-10 h-10 text-red-600" />,
+        className: "custom-message custom-message-error",
+      });
     }
   };
 

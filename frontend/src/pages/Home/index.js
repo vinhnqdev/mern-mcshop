@@ -82,7 +82,6 @@ const HomePage = () => {
         products={arrivalProduct}
         loading={arrivalLoading}
       />
-
       {productListByCategory.map((prods, index) => (
         <ListProduct
           key={index}
