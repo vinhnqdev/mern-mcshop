@@ -5,3 +5,4 @@ export * from "./ShippingForm";
 export * from "./UserAddressList";
 export * from "./Tabs";
 export * from "./OrderDetail";
+export * from "./Meta";

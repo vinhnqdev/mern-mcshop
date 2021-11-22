@@ -2,7 +2,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import productApi from "api/productApi";
 import { getCategoryList } from "app/categoryThunk";
 import { getProducts } from "app/productThunk";
-import { ListProduct } from "components/Common";
+import { ListProduct, Meta } from "components/Common";
 import Carousel from "components/UI/Slider";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,6 +68,7 @@ const HomePage = () => {
 
   return (
     <section className="space-y-10">
+      <Meta />
       <Carousel />
       <ListProduct
         buyButton={true}

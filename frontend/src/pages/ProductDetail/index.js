@@ -9,7 +9,7 @@ import ImagesGallery from "./components/ImagesGallery";
 import ProductDetail from "./components/ProductDetail";
 import { cartActions } from "app/cartSlice";
 import ReviewList from "./components/ReviewList";
-import { ListProduct } from "components/Common";
+import { ListProduct, Meta } from "components/Common";
 
 const ProductDetailPage = () => {
   const [image, setImage] = useState(0);
@@ -62,6 +62,7 @@ const ProductDetailPage = () => {
 
   return (
     <section>
+      <Meta title={product.name} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 space-y-8 lg:space-y-0">
         <ImagesGallery product={product} imageIndex={image} onChange={(index) => setImage(index)} />
         <ProductDetail
